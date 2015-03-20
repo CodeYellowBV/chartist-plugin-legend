@@ -4,16 +4,6 @@ Implements a legend for [Chartist](https://github.com/gionkunz/chartist-js) char
 
 ## Install
 
-Install with npm. Then add this to your require.js config file:
-
-```js
-'shim': {
-    'chartist-plugin-legend': {
-        'deps': ['chartist', 'jquery']
-    }
-}
-```
-
 As styles are very different with each project, no CSS is included. You can copy paste this to use as base:
 
 ```scss
@@ -53,13 +43,13 @@ As styles are very different with each project, no CSS is included. You can copy
 In an example chart:
 
 ```js
-ChartistLegend = require('chartist-plugin-legend');
+require('chartist-plugin-legend');
 
 new Chartist.Bar('.ct-chart', data, {
         stackBars: true,
     },
     plugins: [
-        new ChartistLegend()
+        Chartist.plugins.legend()
     ]
 });
 ```
