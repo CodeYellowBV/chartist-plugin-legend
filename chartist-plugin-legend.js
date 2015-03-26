@@ -67,7 +67,7 @@
 
                 if (hasSeriesName) {
                     // Loop through all series to set each name in a list item.
-                    _.each(chart.data.series, function (series, i) {
+                    $.each(chart.data.series, function (i, series) {
                         if (series[options.seriesName]) {
                             insertLegendItem(i, series.name);
                         } else {
@@ -75,7 +75,7 @@
                         }
                     });
                 } else {
-                    _.each(chart.data.labels, function (label, i) {
+                    $.each(chart.data.labels, function (i, label) {
                         insertLegendItem(i, label);
                     });
                 }
