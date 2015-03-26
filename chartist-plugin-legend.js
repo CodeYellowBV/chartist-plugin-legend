@@ -36,7 +36,8 @@
 
         var defaultOptions = {
             seriesName: 'name',
-            inside: false // Shows the legend inside the chart (with CSS) - Not in use yet.
+            inside: false, // Shows the legend inside the chart (with CSS) - Not in use yet.
+            className: '',
         };
 
         Chartist.plugins = Chartist.plugins || {};
@@ -51,7 +52,8 @@
                     legendClass = chart instanceof Chartist.Pie ? 'ct-legend-inside' : '',
                     $legend = $chart
                     .append('<ul class="ct-legend '+ legendClass +'"></ul>')
-                    .find('.ct-legend');
+                    .find('.ct-legend')
+                    .addClass(options.className);
 
                 var insertLegendItem = function (i, name) {
                     $legend.append('<li class="ct-series-' + i + '">' + name + '</li>');

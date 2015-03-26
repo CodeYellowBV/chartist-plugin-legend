@@ -54,5 +54,6 @@ new Chartist.Bar('.ct-chart', data, {
 });
 ```
 
-__TODO:__ Add options.
-
+| __Option__ | __Description__ | __Type__ | __Default__ |
+| ---        | ---             | ---      | ---         |
+| `className` | Add extra classes. | `string` | `''` |
