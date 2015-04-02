@@ -1,7 +1,7 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['window', 'document', 'Chartist', 'jquery'], function () {
+    define(['chartist', 'jquery'], function () {
       return (root.returnExportsGlobal = factory());
     });
   } else if (typeof exports === 'object') {
