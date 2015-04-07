@@ -57,3 +57,5 @@ new Chartist.Bar('.ct-chart', data, {
 | __Option__ | __Description__ | __Type__ | __Default__ |
 | ---        | ---             | ---      | ---         |
 | `className` | Add extra classes. | `string` | `''` |
+| `clickable` | Make the legend items clickable; when clicked the corresponding series will disappear. | `bool` | `true` |
+| `legendNames` | Use custom names for the legend. By default the `name` property of the series will be used (for charts labels will be used) | `mixed` | `false` |
