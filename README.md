@@ -8,6 +8,9 @@ As styles are very different with each project, no CSS is included. You can copy
 
 ```scss
 .ct-legend {
+    position: relative;
+    z-index: 10;
+    
     li {
         position: relative;
         padding-left: 23px;
@@ -15,13 +18,17 @@ As styles are very different with each project, no CSS is included. You can copy
     }
 
     li:before {
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
         position: absolute;
-        top: 2px;
         left: 0;
         content: '';
+        border: 3px solid transparent;
         border-radius: 2px;
+    }
+
+    li.inactive:before {
+        background: transparent;
     }
 
     &.ct-legend-inside {
@@ -33,6 +40,7 @@ As styles are very different with each project, no CSS is included. You can copy
     @for $i from 0 to length($ct-series-colors) {
         .ct-series-#{$i}:before {
             background-color: nth($ct-series-colors, $i + 1);
+            border-color: nth($ct-series-colors, $i + 1);
         }
     }
 }
