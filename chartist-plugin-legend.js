@@ -50,7 +50,7 @@
                 }
 
                 var chartElement = chart.container;
-                chartElement.innerHTML += "<ul class=\"ct-legend\"></ul>";
+                chartElement.innerHTML += '<ul class="ct-legend"></ul>';
                 var legendElement = chartElement.querySelector(".ct-legend");
                 if (chart instanceof Chartist.Pie) {
                     legendElement.classList.add('ct-legend-inside');
@@ -58,10 +58,6 @@
                 if (typeof options.className === "string" && options.className.length > 0) {
                     legendElement.classList.add(options.className);
                 }
-
-                var insertLegendItem = function (i, name) {
-                    legendElement.innerHTML += '<li class="ct-series-' + i + '" data-legend="' + i + '">' + name + '</li>';
-                };
 
                 var removedSeries = [],
                     originalSeries = chart.data.series.slice(0);
@@ -74,11 +70,12 @@
                 legendNames = options.legendNames || legendNames;
 
                 // Loop through all legends to set each name in a list item.
-                legendNames.forEach(function (legend, i) {
+                var legendHtml = legendNames.map(function (legend, i) {
                     var legendName = legend.name || legend;
-                    insertLegendItem(i, legendName);
-                });
-
+                    return '<li class="ct-series-' + i.toString() + '" data-legend="' + i.toString() + '">' + legendName + '</li>';
+                }).join("");
+                legendElement.innerHTML = legendHtml;
+ 
                 if (options.clickable) {
                     var legendChildClickEvent = function (e) {
                         e.preventDefault();
