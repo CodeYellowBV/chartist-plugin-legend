@@ -1,11 +1,11 @@
 {
-    "name": "chartist-plugin-legend",
-    "version": "0.1.1",
-    "author": "Kees Kluskens <kees@codeyellow.nl>",
-    "description": "Legend plugin for Chartist.js.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
-    },
-    "main": "chartist-plugin-legend.js"
+  "name": "chartist-plugin-legend",
+  "version": "0.2.0",
+  "author": "Kees Kluskens <kees@codeyellow.nl>",
+  "description": "Legend plugin for Chartist.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
+  },
+  "main": "chartist-plugin-legend.js"
 }
