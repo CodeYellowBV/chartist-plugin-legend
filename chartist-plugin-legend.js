@@ -1,16 +1,16 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['chartist', 'jquery'], function (chartist, jquery) {
-            return (root.returnExportsGlobal = factory(chartist, jquery));
+        define(['chartist'], function (chartist) {
+            return (root.returnExportsGlobal = factory(chartist));
         });
     } else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
         // like Node.
-        module.exports = factory(require('chartist'), require('jquery'));
+        module.exports = factory(require('chartist'));
     } else {
-        root['Chartist.plugins.legend'] = factory(root.chartist, root.jquery);
+        root['Chartist.plugins.legend'] = factory(root.chartist);
     }
 }(this, function () {
 
@@ -18,7 +18,7 @@
      * This Chartist plugin creates a legend to show next to the chart.
      *
      */
-    (function (Chartist, $) {
+    (function (Chartist) {
         'use strict';
 
         var defaultOptions = {
@@ -49,39 +49,52 @@
                     });
                 }
 
-                var $chart = $(chart.container),
-                    legendClass = chart instanceof Chartist.Pie ? 'ct-legend-inside' : '',
-                    $legend = $chart
-                    .append('<ul class="ct-legend"></ul>')
-                    .find('.ct-legend')
-                    .addClass(legendClass)
-                    .addClass(options.className);
+                var chartElement = chart.container;
+                chartElement.innerHTML += "<ul class=\"ct-legend\"></ul>";
+                var legendElement = chartElement.querySelector(".ct-legend");
+                if (chart instanceof Chartist.Pie) {
+                    legendElement.classList.add('ct-legend-inside');
+                }
+                if (typeof options.className === "string" && options.className.length > 0) {
+                    legendElement.classList.add(options.className);
+                }
 
                 var insertLegendItem = function (i, name) {
-                    $legend.append('<li class="ct-series-' + i + '" data-legend="' + i + '">' + name + '</li>');
+                    legendElement.innerHTML += '<li class="ct-series-' + i + '" data-legend="' + i + '">' + name + '</li>';
                 };
 
                 var removedSeries = [],
                     originalSeries = chart.data.series.slice(0);
 
+                // Get the right array to use for generating the legend.
+                var legendNames = chart.data.series;
+                if (chart instanceof Chartist.Pie) {
+                    legendNames = chart.data.labels;
+                }
+                legendNames = options.legendNames || legendNames;
+
+                // Loop through all legends to set each name in a list item.
+                legendNames.forEach(function (legend, i) {
+                    var legendName = legend.name || legend;
+                    insertLegendItem(i, legendName);
+                });
+
                 if (options.clickable) {
-                    $legend.on('click', 'li', function (e) {
+                    var legendChildClickEvent = function (e) {
                         e.preventDefault();
 
-                        var seriesIndex = parseInt($(this).attr('data-legend')),
+                        var seriesIndex = parseInt(this.getAttribute('data-legend')),
                             removedSeriesIndex = removedSeries.indexOf(seriesIndex);
 
                         if (removedSeriesIndex > -1) {
                             // Add to series again.
                             removedSeries.splice(removedSeriesIndex, 1);
-
-                            $(this).removeClass('inactive');
+                            this.classList.remove('inactive');
                         } else {
                             // Remove from series, only if a minimum of one series is still visible.
                             if (chart.data.series.length > 1) {
                                 removedSeries.push(seriesIndex);
-
-                                $(this).addClass('inactive');
+                                this.classList.add('inactive');
                             }
                         }
 
@@ -99,27 +112,18 @@
                         chart.data.series = seriesCopy;
 
                         chart.update();
+                    };
+                    var legendElementChildren = legendElement.querySelectorAll("li");
+                    Array.prototype.forEach.call(legendElementChildren, function (legendElementChild) {
+                        legendElementChild.onclick = legendChildClickEvent;
                     });
                 }
 
-                // Get the right array to use for generating the legend.
-                var legendNames = chart.data.series;
-                if (chart instanceof Chartist.Pie) {
-                    legendNames = chart.data.labels;
-                }
-                legendNames = options.legendNames || legendNames;
-
-                // Loop through all legends to set each name in a list item.
-                legendNames.forEach(function (legend, i) {
-                    var legendName = legend.name || legend;
-
-                    insertLegendItem(i, legendName);
-                });
             };
 
         };
 
-    }(Chartist, $));
+    }(Chartist));
 
     return Chartist.plugins.legend;
 
