@@ -8,5 +8,8 @@
     "type": "git",
     "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
   },
-  "main": "chartist-plugin-legend.js"
+  "main": "chartist-plugin-legend.js",
+  "devDependencies": {
+    "chartist": "^0.9.5"
+  }
 }
