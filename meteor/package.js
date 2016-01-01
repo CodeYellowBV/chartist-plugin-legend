@@ -4,12 +4,12 @@
 var packageName = 'mspi:chartistlegend';  // https://atmospherejs.com/hammer/hammer
 var where = 'client';  // where to install: 'client' or 'server'. For both, pass nothing.
 
-var packageJson = JSON.parse(Npm.require("fs").readFileSync('../package.json'));
+// var packageJson = JSON.parse(Npm.require("fs").readFileSync('../package.json'));
 
 Package.describe({
   name: packageName,
   summary: 'Adds a legend plugin for Chartist (official) with clickable features',
-  version: packageJson.version,
+  version: '0.2.1',
   git: 'https://github.com/CodeYellowBV/chartist-plugin-legend.git'
 });
 
