@@ -8,14 +8,15 @@ var where = 'client';  // where to install: 'client' or 'server'. For both, pass
 
 Package.describe({
   name: packageName,
-  summary: 'Adds a legend plugin for Chartist (official) with clickable features',
-  version: '0.2.1',
+  summary: 'Adds a legend plugin for Chartist (official) with clickable features. Works with package mfpierre:chartist-js',
+  version: '0.2.2',
   git: 'https://github.com/CodeYellowBV/chartist-plugin-legend.git'
 });
 
 Package.onUse(function (api) {
   api.versionsFrom(['METEOR@0.9.0', 'METEOR@1.0']);
   api.export('ChartistLegend');
+  api.use('mfpierre:chartist-js', 'client');
   api.addFiles([
     '../chartist-plugin-legend.js',
     'export.js'
