@@ -8,7 +8,7 @@ var where = 'client';  // where to install: 'client' or 'server'. For both, pass
 Package.describe({
   name: packageName,
   summary: 'Adds a legend plugin for Chartist (official). Depends on package mfpierre:chartist-js',
-  version: '0.2.5',
+  version: '0.2.6',
   git: 'https://github.com/mattiLeBlanc/chartist-plugin-legend.git'
 });
 

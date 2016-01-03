@@ -72,6 +72,7 @@
               // default placement to above
               //
               options.placement       = options.placement || 'above';
+              legendElement.className += ' ' + options.placement;
 
               // add legend outside of chart container because it can be re-drawn when using reactive viewstates and it will muck up the legend position
               //
