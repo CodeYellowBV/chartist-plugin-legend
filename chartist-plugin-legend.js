@@ -77,21 +77,24 @@
             chart.container.appendChild(legendElement);
 
             if (options.clickable) {
-                var legendChildClickEvent = function (e) {
+                legendElement.addEventListener('click', function (e) {
+                    var li = e.target;
+                    if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
+                        return;
                     e.preventDefault();
 
-                    var seriesIndex = parseInt(this.getAttribute('data-legend')),
+                    var seriesIndex = parseInt(li.getAttribute('data-legend')),
                         removedSeriesIndex = removedSeries.indexOf(seriesIndex);
 
                     if (removedSeriesIndex > -1) {
                         // Add to series again.
                         removedSeries.splice(removedSeriesIndex, 1);
-                        this.classList.remove('inactive');
+                        li.classList.remove('inactive');
                     } else {
                         // Remove from series, only if a minimum of one series is still visible.
                         if (chart.data.series.length > 1) {
                             removedSeries.push(seriesIndex);
-                            this.classList.add('inactive');
+                            li.classList.add('inactive');
                         }
                     }
 
@@ -109,10 +112,6 @@
                     chart.data.series = seriesCopy;
 
                     chart.update();
-                };
-                var legendElementChildren = legendElement.querySelectorAll("li");
-                Array.prototype.forEach.call(legendElementChildren, function (legendElementChild) {
-                    legendElementChild.onclick = legendChildClickEvent;
                 });
             }
 
