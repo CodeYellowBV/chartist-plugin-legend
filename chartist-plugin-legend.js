@@ -47,9 +47,8 @@
                 });
             }
 
-            var chartElement = chart.container;
-            chartElement.innerHTML += '<ul class="ct-legend"></ul>';
-            var legendElement = chartElement.querySelector(".ct-legend");
+            var legendElement = document.createElement('ul');
+            legendElement.className = 'ct-legend';
             if (chart instanceof Chartist.Pie) {
                 legendElement.classList.add('ct-legend-inside');
             }
@@ -68,28 +67,34 @@
             legendNames = options.legendNames || legendNames;
 
             // Loop through all legends to set each name in a list item.
-            var legendHtml = legendNames.map(function (legend, i) {
-                var legendName = legend.name || legend;
-                return '<li class="ct-series-' + i.toString() + '" data-legend="' + i.toString() + '">' + legendName + '</li>';
-            }).join("");
-            legendElement.innerHTML = legendHtml;
+            legendNames.forEach(function (legend, i) {
+                var li = document.createElement('li');
+                li.className = 'ct-series-' + i;
+                li.setAttribute('data-legend', i);
+                li.textContent = legend.name || legend;
+                legendElement.appendChild(li);
+            });
+            chart.container.appendChild(legendElement);
 
             if (options.clickable) {
-                var legendChildClickEvent = function (e) {
+                legendElement.addEventListener('click', function (e) {
+                    var li = e.target;
+                    if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
+                        return;
                     e.preventDefault();
 
-                    var seriesIndex = parseInt(this.getAttribute('data-legend')),
+                    var seriesIndex = parseInt(li.getAttribute('data-legend')),
                         removedSeriesIndex = removedSeries.indexOf(seriesIndex);
 
                     if (removedSeriesIndex > -1) {
                         // Add to series again.
                         removedSeries.splice(removedSeriesIndex, 1);
-                        this.classList.remove('inactive');
+                        li.classList.remove('inactive');
                     } else {
                         // Remove from series, only if a minimum of one series is still visible.
                         if (chart.data.series.length > 1) {
                             removedSeries.push(seriesIndex);
-                            this.classList.add('inactive');
+                            li.classList.add('inactive');
                         }
                     }
 
@@ -107,10 +112,6 @@
                     chart.data.series = seriesCopy;
 
                     chart.update();
-                };
-                var legendElementChildren = legendElement.querySelectorAll("li");
-                Array.prototype.forEach.call(legendElementChildren, function (legendElementChild) {
-                    legendElementChild.onclick = legendChildClickEvent;
                 });
             }
 
