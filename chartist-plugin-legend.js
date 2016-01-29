@@ -47,9 +47,8 @@
                 });
             }
 
-            var chartElement = chart.container;
-            chartElement.innerHTML += '<ul class="ct-legend"></ul>';
-            var legendElement = chartElement.querySelector(".ct-legend");
+            var legendElement = document.createElement('ul');
+            legendElement.className = 'ct-legend';
             if (chart instanceof Chartist.Pie) {
                 legendElement.classList.add('ct-legend-inside');
             }
@@ -68,11 +67,14 @@
             legendNames = options.legendNames || legendNames;
 
             // Loop through all legends to set each name in a list item.
-            var legendHtml = legendNames.map(function (legend, i) {
-                var legendName = legend.name || legend;
-                return '<li class="ct-series-' + i.toString() + '" data-legend="' + i.toString() + '">' + legendName + '</li>';
-            }).join("");
-            legendElement.innerHTML = legendHtml;
+            legendNames.forEach(function (legend, i) {
+                var li = document.createElement('li');
+                li.className = 'ct-series-' + i;
+                li.setAttribute('data-legend', i);
+                li.textContent = legend.name || legend;
+                legendElement.appendChild(li);
+            });
+            chart.container.appendChild(legendElement);
 
             if (options.clickable) {
                 var legendChildClickEvent = function (e) {
