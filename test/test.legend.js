@@ -14,6 +14,20 @@ var chartDataPie = {
     series: [20, 10, 30, 40]
 };
 
+// PhantomJS can't do a `.click()` on a DOM element, this is a workaround.
+function click(el){
+    var ev = document.createEvent('MouseEvent');
+    ev.initMouseEvent(
+        "click",
+        true, true,
+        window, null,
+        0, 0, 0, 0,
+        false, false, false, false,
+        0, null
+    );
+    el.dispatchEvent(ev);
+}
+
 function generateChart(type, chartData, legendOptions) {
     return new Chartist[type]('.ct-chart', chartData, {
         fullWidth: true,
@@ -154,8 +168,7 @@ describe('Chartist plugin legend', function() {
                 expect(chart.data.series.length).to.equal(3);
 
                 // The first click should hide the corresponding series.
-                console.log('ha', seriesB);
-                seriesB.click();
+                click(seriesB);
                 expect(chart.data.series.length).to.equal(2);
                 expect(chart.data.series[0].name).to.equal('Blue pill');
                 expect(chart.data.series[1].name).to.equal('Purple pill');
@@ -165,7 +178,7 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries[1].className.baseVal).to.contain('ct-series-c');
 
                 // A second click should show the corresponding series again.
-                seriesB.click();
+                click(seriesB);
                 var svgSeries2 = chart.container.querySelectorAll('g.ct-series');
                 expect(svgSeries2.length).to.equal(3);
                 expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
@@ -177,14 +190,14 @@ describe('Chartist plugin legend', function() {
                 var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
 
                 // The first click should hide the corresponding series.
-                seriesB.click();
+                click(seriesB);
                 var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
                 expect(legendItems[0].className).to.equal('ct-series-0');
                 expect(legendItems[1].className).to.equal('ct-series-1 inactive');
                 expect(legendItems[2].className).to.equal('ct-series-2');
 
                 // A second click should show the corresponding series again.
-                seriesB.click();
+                click(seriesB);
                 var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
                 expect(inactiveItem.length).to.equal(0);
             });
