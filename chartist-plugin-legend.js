@@ -32,6 +32,11 @@
         options = Chartist.extend({}, defaultOptions, options);
 
         return function legend(chart) {
+            var existingLegendElement = chart.container.querySelector('.ct-legend');
+            if (existingLegendElement) {
+                // Clear legend if already existing.
+                existingLegendElement.remove();
+            }
 
             // Set a unique className for each series so that when a series is removed,
             // the other series still have the same color.
