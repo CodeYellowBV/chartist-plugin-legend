@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Test Runner</title>
+
+    <link href="../node_modules/mocha/mocha.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../node_modules/chartist/dist/chartist.min.css">
+</head>
+<body>
+    <div id="mocha"></div>
+
+    <div class="ct-chart"></div>
+
+    <script src="../node_modules/chartist/dist/chartist.min.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../chartist-plugin-legend.js"></script>
+
+    <script>mocha.setup('bdd')</script>
+    <script src="test.legend.js">
+
+    </script>
+    <script>
+        mocha.checkLeaks();
+        mocha.run();
+    </script>
+</body>
+</html>
