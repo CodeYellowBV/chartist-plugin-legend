@@ -35,7 +35,7 @@
             var existingLegendElement = chart.container.querySelector('.ct-legend');
             if (existingLegendElement) {
                 // Clear legend if already existing.
-                existingLegendElement.remove();
+                existingLegendElement.parentNode.removeChild(existingLegendElement);
             }
 
             // Set a unique className for each series so that when a series is removed,
