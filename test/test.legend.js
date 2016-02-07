@@ -18,7 +18,7 @@ var chartDataPie = {
 function click(el){
     var ev = document.createEvent('MouseEvent');
     ev.initMouseEvent(
-        "click",
+        'click',
         true, true,
         window, null,
         0, 0, 0, 0,
