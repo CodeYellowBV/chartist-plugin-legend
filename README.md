@@ -1,6 +1,7 @@
 # chartist-plugin-legend
 
 [![Build Status](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend.svg?branch=master)](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend)
+[![Coverage Status](https://coveralls.io/repos/github/CodeYellowBV/chartist-plugin-legend/badge.svg?branch=master)](https://coveralls.io/github/CodeYellowBV/chartist-plugin-legend?branch=master)
 
 Implements a legend for [Chartist](https://github.com/gionkunz/chartist-js) charts.
 

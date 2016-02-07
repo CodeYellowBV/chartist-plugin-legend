@@ -53,6 +53,12 @@ describe('Chartist plugin legend', function() {
         expect(window.Chartist.plugins.legend).to.exist;
     });
 
+    before(function() {
+        var chartEl = document.createElement('div');
+        chartEl.classList.add('ct-chart');
+        document.body.appendChild(chartEl);
+    });
+
     describe('work with a Line chart', function() {
         before(function(done) {
             chart = generateChart('Line', chartDataLine);
