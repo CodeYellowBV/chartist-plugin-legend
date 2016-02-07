@@ -143,11 +143,23 @@ describe('Chartist plugin legend', function() {
                 var legendKey = 0;
                 var parent = chart.container.querySelector('ul.ct-legend');
 
+                expect(parent.childNodes.length).to.equal(3);
                 [].forEach.call(parent.childNodes, function(item) {
                     expect(item.innerHTML).to.equal(legendNames[legendKey]);
                     legendKey += 1;
                 });
 
+                destroyChart();
+                done();
+            });
+        });
+
+        it('should allow a custom class name', function(done) {
+            chart = generateChart('Line', chartDataLine, { className: 'bananas' });
+
+            chart.on('created', function() {
+                var legend = chart.container.querySelector('ul.ct-legend');
+                expect(legend.classList[1]).to.equal('bananas');
                 destroyChart();
                 done();
             });
