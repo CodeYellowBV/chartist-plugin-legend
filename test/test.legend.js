@@ -151,7 +151,10 @@ describe('Chartist plugin legend', function() {
             before(function(done) {
                 chart = generateChart('Line', chartDataLine, { clickable: true });
 
-                chart.on('created', function() { done(); });
+                chart.on('created', function() {
+                    chart.off('created');
+                    done();
+                });
             });
 
             after(destroyChart);
