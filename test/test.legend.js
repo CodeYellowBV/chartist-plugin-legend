@@ -167,7 +167,12 @@ describe('Chartist plugin legend', function() {
 
         describe('clickable', function() {
             before(function(done) {
-                chart = generateChart('Line', chartDataLine, { clickable: true });
+                chart = generateChart('Line', chartDataLine, {
+                    clickable: true,
+                    onClick: function(chart,e) {
+                        chart.legendClicked = true;
+                    }
+                });
 
                 chart.on('created', function() {
                     chart.off('created');
@@ -221,6 +226,13 @@ describe('Chartist plugin legend', function() {
                 click(seriesB);
                 var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
                 expect(inactiveItem.length).to.equal(0);
+            });
+
+            it('should call a function after a click on the legend item', function() {
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                click(seriesB);
+                expect(chart.legendClicked).to.equal(true);
             });
         });
     });
