@@ -23,7 +23,7 @@
         className: '',
         legendNames: false,
         clickable: true,
-        chartFnc: null
+        onClick: null
     };
 
     Chartist.plugins = Chartist.plugins || {};
@@ -115,8 +115,8 @@
                         seriesCopy.splice(series, 1);
                     });
 
-                    if (options.chartFnc) {
-                        chart = options.chartFnc(chart, e) || chart;
+                    if (options.onClick) {
+                        options.onClick(chart, e);
                     }
 
                     chart.data.series = seriesCopy;
