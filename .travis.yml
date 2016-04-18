@@ -1,0 +1,14 @@
+sudo: false
+language: node_js
+
+node_js:
+  - stable
+
+install:
+  - npm install
+
+after_script:
+  - cat coverage/report-lcov/lcov.info | node_modules/.bin/coveralls
+
+script:
+  - npm test

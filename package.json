@@ -1,6 +1,6 @@
 {
   "name": "chartist-plugin-legend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Kees Kluskens <kees@codeyellow.nl>",
   "description": "Legend plugin for Chartist.js.",
   "license": "ISC",
@@ -8,5 +8,23 @@
     "type": "git",
     "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
   },
-  "main": "chartist-plugin-legend.js"
+  "main": "chartist-plugin-legend.js",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chartist": "^0.9.5",
+    "coveralls": "^2.11.6",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-mocha": "^0.2.1",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "mocha": "^2.4.5",
+    "phantomjs-prebuilt": "^2.1.4"
+  },
+  "scripts": {
+    "test": "karma start",
+    "test-chrome": "karma start --browsers=Chrome",
+    "test-firefox": "karma start --browsers=Firefox"
+  }
 }
