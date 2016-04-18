@@ -76,3 +76,4 @@ new Chartist.Bar('.ct-chart', data, {
 | `className` | Add extra classes. | `string` | `''` |
 | `clickable` | Make the legend items clickable; when clicked the corresponding series will disappear. | `bool` | `true` |
 | `legendNames` | Use custom names for the legend. By default the `name` property of the series will be used (for charts labels will be used) | `mixed` | `false` |
+| `onClick` | Accepts a function that gets invoked if `clickable` is true. The function has the `chart`, and the click event (`e`), as arguments. | `mixed` | `false` |

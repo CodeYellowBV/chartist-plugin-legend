@@ -22,7 +22,8 @@
     var defaultOptions = {
         className: '',
         legendNames: false,
-        clickable: true
+        clickable: true,
+        onClick: null
     };
 
     Chartist.plugins = Chartist.plugins || {};
@@ -113,6 +114,10 @@
                     removedSeries.forEach(function (series) {
                         seriesCopy.splice(series, 1);
                     });
+
+                    if (options.onClick) {
+                        options.onClick(chart, e);
+                    }
 
                     chart.data.series = seriesCopy;
 
