@@ -64,10 +64,10 @@ require('chartist-plugin-legend');
 
 new Chartist.Bar('.ct-chart', data, {
         stackBars: true,
+        plugins: [
+            Chartist.plugins.legend()
+        ]
     },
-    plugins: [
-        Chartist.plugins.legend()
-    ]
 });
 ```
 
