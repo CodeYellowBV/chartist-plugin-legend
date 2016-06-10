@@ -42,15 +42,17 @@
             // Set a unique className for each series so that when a series is removed,
             // the other series still have the same color.
             if (options.clickable) {
-                chart.data.series.forEach(function (series, seriesIndex) {
+                var newSeries = chart.data.series.map(function (series, seriesIndex) {
                     if (typeof series !== 'object') {
                         series = {
-                            data: series
+                            value: series
                         };
                     }
 
                     series.className = series.className || chart.options.classNames.series + '-' + Chartist.alphaNumerate(seriesIndex);
+                    return series;
                 });
+                chart.data.series = newSeries;
             }
 
             var legendElement = document.createElement('ul');
@@ -58,7 +60,7 @@
             if (chart instanceof Chartist.Pie) {
                 legendElement.classList.add('ct-legend-inside');
             }
-            if (typeof options.className === "string" && options.className.length > 0) {
+            if (typeof options.className === 'string' && options.className.length > 0) {
                 legendElement.classList.add(options.className);
             }
 

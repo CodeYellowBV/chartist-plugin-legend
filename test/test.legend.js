@@ -156,8 +156,10 @@ describe('Chartist plugin legend', function() {
             chart = generateChart('Line', chartDataLine);
 
             chart.on('created', function() {
+                chart.off('created');
                 chart2 = generateChart('Line', chart2DataLine, null, 2);
                 chart2.on('created', function() {
+                    chart2.off('created');
                     done();
                 });
             });
@@ -272,6 +274,49 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
+            });
+        });
+
+        describe('clickable for a pie', function() {
+            before(function(done) {
+                chart = generateChart('Pie', chartDataPie, {
+                    clickable: true,
+                });
+
+                chart.on('created', function() {
+                    chart.off('created');
+                    done();
+                });
+            });
+
+            after(destroyChart);
+
+            it('should enforce a className for each series', function() {
+                expect(chart.data.series[0].className).to.equal('ct-series-a');
+                expect(chart.data.series[1].className).to.equal('ct-series-b');
+            });
+
+            it('should hide a series after a click on the legend item', function() {
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                expect(chart.data.series.length).to.equal(4);
+
+                // The first click should hide the corresponding series.
+                click(seriesB);
+                expect(chart.data.series.length).to.equal(3);
+                var svgSeries = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries.length).to.equal(3);
+                expect(svgSeries[0].className.baseVal).to.contain('ct-series-d');
+                expect(svgSeries[1].className.baseVal).to.contain('ct-series-c');
+
+                // A second click should show the corresponding series again.
+                click(seriesB);
+                var svgSeries2 = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries2.length).to.equal(4);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-d');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-c');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[3].className.baseVal).to.contain('ct-series-a');
             });
         });
     });
