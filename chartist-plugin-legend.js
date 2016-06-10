@@ -55,7 +55,8 @@
                 chart.data.series = newSeries;
             }
 
-            var legendElement = document.createElement('ul');
+            var legendElement = document.createElement('ul'),
+                isPieChart = chart instanceof Chartist.Pie;
             legendElement.className = 'ct-legend';
             if (chart instanceof Chartist.Pie) {
                 legendElement.classList.add('ct-legend-inside');
@@ -68,8 +69,10 @@
                 originalSeries = chart.data.series.slice(0);
 
             // Get the right array to use for generating the legend.
-            var legendNames = chart.data.series;
-            if (chart instanceof Chartist.Pie) {
+            var legendNames = chart.data.series,
+                useLabels = isPieChart && chart.data.labels;
+            if (useLabels) {
+                var originalLabels = chart.data.labels.slice(0);
                 legendNames = chart.data.labels;
             }
             legendNames = options.legendNames || legendNames;
@@ -109,12 +112,18 @@
                     // Reset the series to original and remove each series that
                     // is still removed again, to remain index order.
                     var seriesCopy = originalSeries.slice(0);
+                    if (useLabels) {
+                        var labelsCopy = originalLabels.slice(0);
+                    }
 
                     // Reverse sort the removedSeries to prevent removing the wrong index.
                     removedSeries.sort().reverse();
 
                     removedSeries.forEach(function (series) {
                         seriesCopy.splice(series, 1);
+                        if (useLabels) {
+                            labelsCopy.splice(series, 1);
+                        }
                     });
 
                     if (options.onClick) {
@@ -122,6 +131,9 @@
                     }
 
                     chart.data.series = seriesCopy;
+                    if (useLabels) {
+                        chart.data.labels = labelsCopy;
+                    }
 
                     chart.update();
                 });

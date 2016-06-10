@@ -299,7 +299,7 @@ describe('Chartist plugin legend', function() {
             it('should hide a series after a click on the legend item', function() {
                 var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
 
-                expect(chart.data.series.length).to.equal(4);
+                expect(chart.data.labels.length).to.equal(4);
 
                 // The first click should hide the corresponding series.
                 click(seriesB);
@@ -308,6 +308,7 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries.length).to.equal(3);
                 expect(svgSeries[0].className.baseVal).to.contain('ct-series-d');
                 expect(svgSeries[1].className.baseVal).to.contain('ct-series-c');
+                expect(chart.data.labels.length).to.equal(3);
 
                 // A second click should show the corresponding series again.
                 click(seriesB);
@@ -317,6 +318,7 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries2[1].className.baseVal).to.contain('ct-series-c');
                 expect(svgSeries2[2].className.baseVal).to.contain('ct-series-b');
                 expect(svgSeries2[3].className.baseVal).to.contain('ct-series-a');
+                expect(chart.data.labels.length).to.equal(4);
             });
         });
     });
