@@ -11,16 +11,16 @@
   "main": "chartist-plugin-legend.js",
   "devDependencies": {
     "chai": "^3.5.0",
-    "chartist": "^0.9.5",
-    "coveralls": "^2.11.6",
-    "karma": "^0.13.19",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-coverage": "^0.5.3",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-mocha": "^0.2.1",
+    "chartist": "^0.9.7",
+    "coveralls": "^2.11.9",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.0.1",
     "karma-phantomjs-launcher": "^1.0.0",
-    "mocha": "^2.4.5",
-    "phantomjs-prebuilt": "^2.1.4"
+    "mocha": "^2.5.3",
+    "phantomjs-prebuilt": "^2.1.7"
   },
   "scripts": {
     "test": "karma start",
