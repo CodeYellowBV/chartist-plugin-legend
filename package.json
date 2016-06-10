@@ -9,6 +9,9 @@
     "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
   },
   "main": "chartist-plugin-legend.js",
+  "files": [
+    "chartist-plugin-legend.js"
+  ],
   "devDependencies": {
     "chai": "^3.5.0",
     "chartist": "^0.9.7",
