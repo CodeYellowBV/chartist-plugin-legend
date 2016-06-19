@@ -9,6 +9,13 @@ var chartDataLine = {
     ]
 };
 
+var chart2DataLine = {
+    labels: ['Week 1', 'Week 2'],
+    series: [
+        {name: 'Second pill', data: [20, 10]}
+    ]
+};
+
 var chartDataPie = {
     labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
     series: [20, 10, 30, 40]
@@ -28,8 +35,9 @@ function click(el){
     el.dispatchEvent(ev);
 }
 
-function generateChart(type, chartData, legendOptions) {
-    return new Chartist[type]('.ct-chart', chartData, {
+function generateChart(type, chartData, legendOptions, chartNumber) {
+    chartNumber = chartNumber || 1;
+    return new Chartist[type]('.ct-chart-' + chartNumber, chartData, {
         fullWidth: true,
         chartPadding: {
             right: 40
@@ -42,11 +50,17 @@ function generateChart(type, chartData, legendOptions) {
 
 describe('Chartist plugin legend', function() {
     var chart;
+    var chart2;
 
     function destroyChart() {
         chart.detach();
         chart.container.innerHTML = '';
         chart = undefined;
+        if (chart2) {
+            chart2.detach();
+            chart2.container.innerHTML = '';
+            chart2 = undefined;
+        }
     }
 
     it('should be defined in chartist', function () {
@@ -55,8 +69,11 @@ describe('Chartist plugin legend', function() {
 
     before(function() {
         var chartEl = document.createElement('div');
-        chartEl.classList.add('ct-chart');
+        chartEl.classList.add('ct-chart-1');
         document.body.appendChild(chartEl);
+        var chartEl2 = document.createElement('div');
+        chartEl2.classList.add('ct-chart-2');
+        document.body.appendChild(chartEl2);
     });
 
     describe('work with a Line chart', function() {
@@ -131,6 +148,30 @@ describe('Chartist plugin legend', function() {
                 expect(item.innerHTML).to.equal(chartDataPie.labels[legendKey]);
                 legendKey += 1;
             });
+        });
+    });
+
+    describe('work with two legends', function() {
+        before(function(done) {
+            chart = generateChart('Line', chartDataLine);
+
+            chart.on('created', function() {
+                chart.off('created');
+                chart2 = generateChart('Line', chart2DataLine, null, 2);
+                chart2.on('created', function() {
+                    chart2.off('created');
+                    done();
+                });
+            });
+        });
+
+        after(destroyChart);
+
+        it('should create unique legends', function () {
+            const legendText1 = chart.container.querySelector('ul.ct-legend').textContent;
+            const legendText2 = chart2.container.querySelector('ul.ct-legend').textContent;
+            expect(legendText1).to.equal('Blue pillRed pillPurple pill');
+            expect(legendText2).to.equal('Second pill');
         });
     });
 
@@ -233,6 +274,51 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
+            });
+        });
+
+        describe('clickable for a pie', function() {
+            before(function(done) {
+                chart = generateChart('Pie', chartDataPie, {
+                    clickable: true,
+                });
+
+                chart.on('created', function() {
+                    chart.off('created');
+                    done();
+                });
+            });
+
+            after(destroyChart);
+
+            it('should enforce a className for each series', function() {
+                expect(chart.data.series[0].className).to.equal('ct-series-a');
+                expect(chart.data.series[1].className).to.equal('ct-series-b');
+            });
+
+            it('should hide a series after a click on the legend item', function() {
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                expect(chart.data.labels.length).to.equal(4);
+
+                // The first click should hide the corresponding series.
+                click(seriesB);
+                expect(chart.data.series.length).to.equal(3);
+                var svgSeries = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries.length).to.equal(3);
+                expect(svgSeries[0].className.baseVal).to.contain('ct-series-d');
+                expect(svgSeries[1].className.baseVal).to.contain('ct-series-c');
+                expect(chart.data.labels.length).to.equal(3);
+
+                // A second click should show the corresponding series again.
+                click(seriesB);
+                var svgSeries2 = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries2.length).to.equal(4);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-d');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-c');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[3].className.baseVal).to.contain('ct-series-a');
+                expect(chart.data.labels.length).to.equal(4);
             });
         });
     });
