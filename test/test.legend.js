@@ -230,7 +230,9 @@ describe('Chartist plugin legend', function() {
             });
 
             it('should hide a series after a click on the legend item', function() {
+                var seriesA = chart.container.querySelector('ul.ct-legend > .ct-series-0');
                 var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+                var seriesC = chart.container.querySelector('ul.ct-legend > .ct-series-2');
 
                 expect(chart.data.series.length).to.equal(3);
 
@@ -251,10 +253,23 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
                 expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
                 expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
+
+                // A click in the last active series should set all series active again.
+                click(seriesA);
+                click(seriesB);
+                expect(chart.data.series.length).to.equal(1);
+                expect(chart.data.series[0].name).to.equal('Purple pill');
+                click(seriesC);
+                expect(svgSeries2.length).to.equal(3);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
             });
 
             it('should update the legend item classes', function() {
+                var seriesA = chart.container.querySelector('ul.ct-legend > .ct-series-0');
                 var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+                var seriesC = chart.container.querySelector('ul.ct-legend > .ct-series-2');
 
                 // The first click should hide the corresponding series.
                 click(seriesB);
@@ -267,6 +282,18 @@ describe('Chartist plugin legend', function() {
                 click(seriesB);
                 var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
                 expect(inactiveItem.length).to.equal(0);
+
+                // A click in the last active series should set all series active again.
+                click(seriesA);
+                click(seriesB);
+                var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
+                expect(legendItems[0].className).to.equal('ct-series-0 inactive');
+                expect(legendItems[1].className).to.equal('ct-series-1 inactive');
+                expect(legendItems[2].className).to.equal('ct-series-2');
+                click(seriesC);
+                var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
+                expect(inactiveItem.length).to.equal(0);
+
             });
 
             it('should call a function after a click on the legend item', function() {

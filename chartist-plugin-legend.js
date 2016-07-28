@@ -30,6 +30,10 @@
 
     Chartist.plugins.legend = function (options) {
 
+        function compareNumbers(a, b) {
+            return a - b;
+        }
+
         options = Chartist.extend({}, defaultOptions, options);
 
         return function legend(chart) {
@@ -107,6 +111,14 @@
                             removedSeries.push(seriesIndex);
                             li.classList.add('inactive');
                         }
+                        // Set all series as active.
+                        else {
+                            removedSeries= [];
+                            var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
+                            seriesItems.forEach(function(item){
+                                item.classList.remove('inactive');
+                            });
+                        }
                     }
 
                     // Reset the series to original and remove each series that
@@ -117,7 +129,7 @@
                     }
 
                     // Reverse sort the removedSeries to prevent removing the wrong index.
-                    removedSeries.sort().reverse();
+                    removedSeries.sort(compareNumbers).reverse();
 
                     removedSeries.forEach(function (series) {
                         seriesCopy.splice(series, 1);
