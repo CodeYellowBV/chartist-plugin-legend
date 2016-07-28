@@ -111,6 +111,14 @@
                             removedSeries.push(seriesIndex);
                             li.classList.add('inactive');
                         }
+                        // Set all series as active.
+                        else {
+                            removedSeries= [];
+                            var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
+                            seriesItems.forEach(function(item){
+                                item.classList.remove('inactive');
+                            });
+                        }
                     }
 
                     // Reset the series to original and remove each series that
