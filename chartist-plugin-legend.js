@@ -30,6 +30,10 @@
 
     Chartist.plugins.legend = function (options) {
 
+        function compareNumbers(a, b) {
+            return a - b;
+        }
+
         options = Chartist.extend({}, defaultOptions, options);
 
         return function legend(chart) {
@@ -117,7 +121,7 @@
                     }
 
                     // Reverse sort the removedSeries to prevent removing the wrong index.
-                    removedSeries.sort().reverse();
+                    removedSeries.sort(compareNumbers).reverse();
 
                     removedSeries.forEach(function (series) {
                         seriesCopy.splice(series, 1);
