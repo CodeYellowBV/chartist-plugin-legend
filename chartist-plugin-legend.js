@@ -91,8 +91,7 @@
                 var li = document.createElement('li');
                 li.className = 'ct-series-' + i;
                 // Append specific class to a legend element, if viable classes are given
-                if (classNamesViable)
-                {
+                if (classNamesViable) {
                    li.className += ' ' + options.classNames[i];
                 }
                 li.setAttribute('data-legend', i);
@@ -118,23 +117,21 @@
                     } else {
                         if(!options.removeAll){
                              // Remove from series, only if a minimum of one series is still visible.
-                          if (chart.data.series.length > 1)
+                          if ( chart.data.series.length > 1)
                           {
                              removedSeries.push(seriesIndex);
                              li.classList.add('inactive');
                           }
                              // Set all series as active.
-                          else
-                          {
+                          else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             seriesItems.forEach(function (item)
-                             {
+                             seriesItems.forEach(function (item) {
                                 item.classList.remove('inactive');
                              });
                           }
                        }
-                       else{
+                       else {
                           // Remove series unaffected if it is the last or not
                           removedSeries.push(seriesIndex);
                           li.classList.add('inactive');
