@@ -115,7 +115,7 @@
                         removedSeries.splice(removedSeriesIndex, 1);
                         li.classList.remove('inactive');
                     } else {
-                        if(!options.removeAll){
+                        if (!options.removeAll){
                              // Remove from series, only if a minimum of one series is still visible.
                           if ( chart.data.series.length > 1)
                           {
