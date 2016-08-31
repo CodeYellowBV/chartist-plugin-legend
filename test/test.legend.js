@@ -205,6 +205,38 @@ describe('Chartist plugin legend', function() {
                 done();
             });
         });
+        
+        it('should allow multiple custom class names', function (done) {
+           var classNames = ['multiclass-0', 'multiclass-1', 'multiclass-hidden'];
+           chart = generateChart('Line', chartDataLine, { classNames: classNames });
+
+           chart.on('created', function () {
+              var legend = chart.container.querySelector('ul.ct-legend');
+
+              expect(chart.data.series.length).to.equal(3);
+              expect(legend.children[0].classList.contains(classNames[0])).to.be.true;
+              expect(legend.children[1].classList.contains(classNames[1])).to.be.true;
+              expect(legend.children[2].classList.contains(classNames[2])).to.be.true;
+              destroyChart();
+              done();
+           });
+        });
+
+        it('should allow to remove all series at once', function () {
+           chart = generateChart('Line', chart2DataLine, { removeAll: true });
+
+           chart.on('created', function () {
+              var seriesA = chart.container.querySelector('ul.ct-legend > .ct-series-0');
+
+              expect(chart.data.series.length).to.equal(1);
+              click(seriesA);
+              expect(chart.data.series.length).to.equal(0);
+              click(seriesA);
+              expect(chart.data.series.length).to.equal(1);
+              destroyChart();
+              done();
+           });
+        })
 
         describe('clickable', function() {
             before(function(done) {
