@@ -93,7 +93,7 @@
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
             // Loop through all legends to set each name in a list item.
-            for (var legendNamesIndex = 0; legendNamesIndex < legendNames.length; legendNamesIndex++) {
+            for (var legendNamesIndex = 0, length = legendNames.length; legendNamesIndex < length; legendNamesIndex++) {
                var legend = legendNames[legendNamesIndex];
                var li = document.createElement('li');
                li.className = 'ct-series-' + legendNamesIndex;
@@ -134,7 +134,7 @@
                           else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             for (var seriesItemsIndex = 0; seriesItemsIndex < seriesItems.length; seriesItemsIndex++)
+                             for (var seriesItemsIndex = 0, length = seriesItems.length; seriesItemsIndex < length; seriesItemsIndex++)
                              {
                                 seriesItems[seriesItemsIndex].classList.remove('inactive');
                              }
@@ -157,7 +157,7 @@
                     // Reverse sort the removedSeries to prevent removing the wrong index.
                     removedSeries.sort(compareNumbers).reverse();
 
-                    for (var removedSeriesIndex = 0; removedSeriesIndex < removedSeries.length; removedSeriesIndex++)
+                    for (var removedSeriesIndex = 0, length = removedSeries.length; removedSeriesIndex < removedSeries.length; removedSeriesIndex++)
                     {
                        var series = removedSeries[removedSeriesIndex];
                        seriesCopy.splice(series, 1);
