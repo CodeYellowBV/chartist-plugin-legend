@@ -82,10 +82,10 @@
                 legendNames = chart.data.labels;
             }
             legendNames = options.legendNames || legendNames;
-            
+
             // Check if given class names are viable to append to legends
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
-            
+
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
                 var li = document.createElement('li');
