@@ -19,13 +19,19 @@
      */
     'use strict';
 
+    var positionEnum = {
+       top: 0,
+       bottom: 1
+    };
+
     var defaultOptions = {
         className: '',
         classNames: false,
         removeAll: false,
         legendNames: false,
         clickable: true,
-        onClick: null
+        onClick: null,
+        position: positionEnum.top
     };
 
     Chartist.plugins = Chartist.plugins || {};
@@ -87,17 +93,19 @@
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
             // Loop through all legends to set each name in a list item.
-            legendNames.forEach(function (legend, i) {
-                var li = document.createElement('li');
-                li.className = 'ct-series-' + i;
-                // Append specific class to a legend element, if viable classes are given
-                if (classNamesViable) {
-                   li.className += ' ' + options.classNames[i];
-                }
-                li.setAttribute('data-legend', i);
-                li.textContent = legend.name || legend;
-                legendElement.appendChild(li);
-            });
+            for (var legendNamesIndex = 0; legendNamesIndex < legendNames.length; legendNamesIndex++) {
+               var legend = legendNames[legendNamesIndex];
+               var li = document.createElement('li');
+               li.className = 'ct-series-' + legendNamesIndex;
+               // Append specific class to a legend element, if viable classes are given
+               if (classNamesViable)
+               {
+                  li.className += ' ' + options.classNames[legendNamesIndex];
+               }
+               li.setAttribute('data-legend', legendNamesIndex);
+               li.textContent = legend.name || legend;
+               legendElement.appendChild(li);
+            }
             chart.container.appendChild(legendElement);
 
             if (options.clickable) {
@@ -126,9 +134,10 @@
                           else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             seriesItems.forEach(function (item) {
-                                item.classList.remove('inactive');
-                             });
+                             for (var seriesItemsIndex = 0; seriesItemsIndex < seriesItems.length; seriesItemsIndex++)
+                             {
+                                seriesItems[seriesItemsIndex].classList.remove('inactive');
+                             }
                           }
                        }
                        else {
@@ -148,12 +157,15 @@
                     // Reverse sort the removedSeries to prevent removing the wrong index.
                     removedSeries.sort(compareNumbers).reverse();
 
-                    removedSeries.forEach(function (series) {
-                        seriesCopy.splice(series, 1);
-                        if (useLabels) {
-                            labelsCopy.splice(series, 1);
-                        }
-                    });
+                    for (var removedSeriesIndex = 0; removedSeriesIndex < removedSeries.length; removedSeriesIndex++)
+                    {
+                       var series = removedSeries[removedSeriesIndex];
+                       seriesCopy.splice(series, 1);
+                       if (useLabels)
+                       {
+                          labelsCopy.splice(series, 1);
+                       }
+                    }
 
                     if (options.onClick) {
                         options.onClick(chart, e);
