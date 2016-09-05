@@ -94,14 +94,13 @@
 
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
-               var legend = legendNames[legendNamesIndex];
                var li = document.createElement('li');
-               li.className = 'ct-series-' + legendNamesIndex;
+               li.className = 'ct-series-' + i;
                // Append specific class to a legend element, if viable classes are given
                if (classNamesViable) {
-                  li.className += ' ' + options.classNames[legendNamesIndex];
+                  li.className += ' ' + options.classNames[i];
                }
-               li.setAttribute('data-legend', legendNamesIndex);
+               li.setAttribute('data-legend', i);
                li.textContent = legend.name || legend;
                legendElement.appendChild(li);
             });
@@ -109,11 +108,11 @@
             chart.on('created', function (data) {
                // Append the legend element to the DOM
                switch (options.position) {
-                  case '.top':
+                  case 'top':
                      chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
                      break;
 
-                  case '.bottom':
+                  case 'bottom':
                      chart.container.insertBefore(legendElement, null);
                      break;
                }
@@ -167,13 +166,12 @@
                     // Reverse sort the removedSeries to prevent removing the wrong index.
                     removedSeries.sort(compareNumbers).reverse();
 
-                    for (var removedSeriesIndex = 0, length = removedSeries.length; removedSeriesIndex < removedSeries.length; removedSeriesIndex++) {
-                       var series = removedSeries[removedSeriesIndex];
-                       seriesCopy.splice(series, 1);
-                       if (useLabels) {
-                          labelsCopy.splice(series, 1);
-                       }
-                    }
+                    removedSeries.forEach(function (series) {
+                        seriesCopy.splice(series, 1);
+                        if (useLabels) {
+                            labelsCopy.splice(series, 1);
+                        }
+                    });
 
                     if (options.onClick) {
                         options.onClick(chart, e);
