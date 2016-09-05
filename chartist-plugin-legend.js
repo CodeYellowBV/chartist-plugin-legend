@@ -93,7 +93,7 @@
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
             // Loop through all legends to set each name in a list item.
-            for (var legendNamesIndex = 0, length = legendNames.length; legendNamesIndex < length; legendNamesIndex++) {
+            legendNames.forEach(function (legend, i) {
                var legend = legendNames[legendNamesIndex];
                var li = document.createElement('li');
                li.className = 'ct-series-' + legendNamesIndex;
@@ -104,7 +104,7 @@
                li.setAttribute('data-legend', legendNamesIndex);
                li.textContent = legend.name || legend;
                legendElement.appendChild(li);
-            }
+            });
 
             chart.on('created', function (data) {
                // Append the legend element to the DOM
@@ -144,9 +144,10 @@
                           else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             for (var seriesItemsIndex = 0, length = seriesItems.length; seriesItemsIndex < length; seriesItemsIndex++) {
-                                seriesItems[seriesItemsIndex].classList.remove('inactive');
-                             }
+                             seriesItems.forEach(function (item)
+                             {
+                                item.classList.remove('inactive');
+                             });
                           }
                        }
                        else {
