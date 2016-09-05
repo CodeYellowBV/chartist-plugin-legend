@@ -95,7 +95,7 @@
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
                var li = document.createElement('li');
-               li.className = 'ct-series-' + i;
+               li.className = 'ct-series-' + i;s
                // Append specific class to a legend element, if viable classes are given
                if (classNamesViable) {
                   li.className += ' ' + options.classNames[i];
@@ -143,8 +143,7 @@
                           else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             seriesItems.forEach(function (item)
-                             {
+                             seriesItems.forEach(function (item) {
                                 item.classList.remove('inactive');
                              });
                           }
