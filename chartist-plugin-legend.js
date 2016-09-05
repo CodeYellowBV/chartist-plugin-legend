@@ -21,9 +21,12 @@
 
     var defaultOptions = {
         className: '',
+        classNames: false,
+        removeAll: false,
         legendNames: false,
         clickable: true,
-        onClick: null
+        onClick: null,
+        position: 'top'
     };
 
     Chartist.plugins = Chartist.plugins || {};
@@ -32,6 +35,13 @@
 
         function compareNumbers(a, b) {
             return a - b;
+        }
+
+        // Catch invalid options
+        if (options && options.position) {
+           if (!(options.position === 'top' || options.position === 'bottom')) {
+              throw Error('The position you entered is not a valid position');
+           }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
@@ -81,15 +91,34 @@
             }
             legendNames = options.legendNames || legendNames;
 
+            // Check if given class names are viable to append to legends
+            var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
+
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
-                var li = document.createElement('li');
-                li.className = 'ct-series-' + i;
-                li.setAttribute('data-legend', i);
-                li.textContent = legend.name || legend;
-                legendElement.appendChild(li);
+               var li = document.createElement('li');
+               li.className = 'ct-series-' + i;
+               // Append specific class to a legend element, if viable classes are given
+               if (classNamesViable) {
+                  li.className += ' ' + options.classNames[i];
+               }
+               li.setAttribute('data-legend', i);
+               li.textContent = legend.name || legend;
+               legendElement.appendChild(li);
             });
-            chart.container.appendChild(legendElement);
+
+            chart.on('created', function (data) {
+               // Append the legend element to the DOM
+               switch (options.position) {
+                  case 'top':
+                     chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
+                     break;
+
+                  case 'bottom':
+                     chart.container.insertBefore(legendElement, null);
+                     break;
+               }
+            });
 
             if (options.clickable) {
                 legendElement.addEventListener('click', function (e) {
@@ -106,19 +135,26 @@
                         removedSeries.splice(removedSeriesIndex, 1);
                         li.classList.remove('inactive');
                     } else {
-                        // Remove from series, only if a minimum of one series is still visible.
-                        if (chart.data.series.length > 1) {
-                            removedSeries.push(seriesIndex);
-                            li.classList.add('inactive');
-                        }
-                        // Set all series as active.
-                        else {
-                            removedSeries= [];
-                            var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                            seriesItems.forEach(function(item){
+                        if (!options.removeAll) {
+                             // Remove from series, only if a minimum of one series is still visible.
+                          if ( chart.data.series.length > 1) {
+                             removedSeries.push(seriesIndex);
+                             li.classList.add('inactive');
+                          }
+                             // Set all series as active.
+                          else {
+                             removedSeries = [];
+                             var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
+                             seriesItems.forEach(function (item) {
                                 item.classList.remove('inactive');
-                            });
-                        }
+                             });
+                          }
+                       }
+                       else {
+                          // Remove series unaffected if it is the last or not
+                          removedSeries.push(seriesIndex);
+                          li.classList.add('inactive');
+                       }
                     }
 
                     // Reset the series to original and remove each series that

@@ -73,7 +73,10 @@ new Chartist.Bar('.ct-chart', data, {
 
 | __Option__ | __Description__ | __Type__ | __Default__ |
 | ---        | ---             | ---      | ---         |
-| `className` | Add extra classes. | `string` | `''` |
-| `clickable` | Make the legend items clickable; when clicked the corresponding series will disappear. | `bool` | `true` |
-| `legendNames` | Use custom names for the legend. By default the `name` property of the series will be used (for charts labels will be used) | `mixed` | `false` |
+| `className` | Adds a class to the `ul` element. | `string` | `''` |
+| `clickable` | Sets the legends clickable state; setting this value to `false` disables toggling graphs on legend click. | `bool` | `true` |
+| `legendNames` | Sets custom legend names. By default the `name` property of the series will be used if none are given. | `mixed` | `false` |
 | `onClick` | Accepts a function that gets invoked if `clickable` is true. The function has the `chart`, and the click event (`e`), as arguments. | `mixed` | `false` |
+| `classNames` | Accepts a array of strings as long as the chart's series, those will be added as classes to the `li` elements. | `mixed` | `false` |
+| `removeAll` | Allow all series to be removed at once. | `bool` | `false` |
+| `position` | Sets the position of the legend element. `top`and `bottom`are currently accepted. | `'top'|'bottom'` | `'top'` |
