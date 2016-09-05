@@ -38,8 +38,10 @@
         }
 
         // Catch invalid options
-        if (options.position && options.position !== 'top' || options.position !== 'bottom') {
-           throw Error('The position you entered is not a valid position')
+        if (options && options.position) {
+           if (!(options.position === 'top' || options.position === 'bottom')) {
+              throw Error('The position you entered is not a valid position');
+           }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
@@ -95,7 +97,7 @@
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
                var li = document.createElement('li');
-               li.className = 'ct-series-' + i;s
+               li.className = 'ct-series-' + i;
                // Append specific class to a legend element, if viable classes are given
                if (classNamesViable) {
                   li.className += ' ' + options.classNames[i];
