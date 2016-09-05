@@ -1,120 +1,649 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
 
-    <title>Legend examples</title>
+    <title>chartist-plugin-legend examples</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700%7CSource+Code+Pro:400,700" media="all">
 
     <style>
-    .ct-chart {
-        position: relative;
-    }
-    .ct-legend {
-        position: relative;
-        z-index: 10;
-        list-style: none;
-    }
-    .ct-legend li {
-        position: relative;
-        padding-left: 23px;
-        margin-bottom: 3px;
-        cursor: pointer;
-    }
-    .ct-legend li:before {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        left: 0;
-        content: '';
-        border: 3px solid transparent;
-        border-radius: 2px;
-    }
-    .ct-legend li.inactive:before {
-        background: transparent;
-    }
-    .ct-legend.ct-legend-inside {
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-    .ct-legend .ct-series-0:before {
-        background-color: #d70206;
-        border-color: #d70206;
-    }
-    .ct-legend .ct-series-1:before {
-        background-color: #f05b4f;
-        border-color: #f05b4f;
-    }
-    .ct-legend .ct-series-2:before {
-        background-color: #f4c63d;
-        border-color: #f4c63d;
-    }
-    .ct-legend .ct-series-3:before {
-        background-color: #d17905;
-        border-color: #d17905;
-    }
-    .ct-legend .ct-series-4:before {
-        background-color: #453d3f;
-        border-color: #453d3f;
-    }
+       .ct-chart {
+           position: relative;
+       }
+       .ct-legend {
+           position: relative;
+           z-index: 10;
+           list-style: none;
+           text-align: center;
+       }
+       .ct-legend li {
+           position: relative;
+           padding-left: 23px;
+           margin-right: 10px;
+           margin-bottom: 3px;
+           cursor: pointer;
+           display: inline-block;
+       }
+       .ct-legend li:before {
+           width: 12px;
+           height: 12px;
+           position: absolute;
+           left: 0;
+           content: '';
+           border: 3px solid transparent;
+           border-radius: 2px;
+       }
+       .ct-legend li.inactive:before {
+           background: transparent;
+       }
+       .ct-legend.ct-legend-inside {
+           position: absolute;
+           top: 0;
+           right: 0;
+       }
+       .ct-legend.ct-legend-inside li{
+           display: block;
+           margin: 0;
+       }
+       .ct-legend .ct-series-0:before {
+           background-color: #d70206;
+           border-color: #d70206;
+       }
+       .ct-legend .ct-series-1:before {
+           background-color: #f05b4f;
+           border-color: #f05b4f;
+       }
+       .ct-legend .ct-series-2:before {
+           background-color: #f4c63d;
+           border-color: #f4c63d;
+       }
+       .ct-legend .ct-series-3:before {
+           background-color: #d17905;
+           border-color: #d17905;
+       }
+       .ct-legend .ct-series-4:before {
+           background-color: #453d3f;
+           border-color: #453d3f;
+       }
+
+       .crazyPink li.ct-series-0:before {
+          background-color: #C2185B;
+          border-color: #C2185B;
+       }
+
+       .crazyPink li.ct-series-1:before {
+          background-color: #E91E63;
+          border-color: #E91E63;
+       }
+
+       .crazyPink li.ct-series-2:before {
+          background-color: #F06292;
+          border-color: #F06292;
+       }
+       .crazyPink li.inactive:before {
+          background-color: transparent;
+       }
+
+       .crazyPink ~ svg .ct-series-a .ct-line, .crazyPink ~ svg .ct-series-a .ct-point {
+          stroke: #C2185B;
+       }
+
+       .crazyPink ~ svg .ct-series-b .ct-line, .crazyPink ~ svg .ct-series-b .ct-point {
+          stroke: #E91E63;
+       }
+
+       .crazyPink ~ svg .ct-series-c .ct-line, .crazyPink ~ svg .ct-series-c .ct-point {
+          stroke: #F06292;
+       }
+       /* Page styling */
+       h1, h2, h3{
+          color: #5b4421;
+          text-transform: uppercase;
+       }
+
+       h1, h2{
+          text-align: center;
+       }
+
+       h3 > * {
+          text-transform: none;
+       }
+
+       .codeblock-hidden{
+          display: none;
+       }
+
+      .javascript.hljs {
+             background-color: #453D3F;
+             padding: 1.3333333333rem;
+             color: #f7f2ea;
+             font-family: "Source Code Pro","Courier New",monospace!important;
+             line-height: 1.4;
+             word-wrap: break-word;
+             height: auto;
+             margin-bottom: 1.3333333333rem
+       }
+
+       .ct-hidden {
+          opacity: 0;
+       }
+
+       .ct-dimmed {
+          opacity: 0.5;
+       }
+
+       .javascript.hljs span::selection, .javascript.hljs::selection {
+         background: #2a2526!important
+       }
+
+       .javascript.hljs .hljs-comment {
+             color: #7b6d70
+       }
+
+       .javascript.hljs .hljs-atom,.javascript.hljs .hljs-number {
+             color: #F4C63D
+       }
+
+       .cm-s-3024-day .hljs-attribute,.javascript.hljs .hljs-property {
+             color: #f7f2ea
+       }
+
+       .javascript.hljs .hljs-keyword {
+             color: #F05B4F;
+             font-weight: 700
+       }
+
+       .javascript.hljs .hljs-string {
+             color: #F4C63D
+       }
+
+       .javascript.hljs .hljs-variable {
+             color: #f7f2ea
+       }
+
+       .javascript.hljs .hljs-def,.javascript.hljs .hljs-variable-2 {
+             color: #f8b3ad
+       }
+
+       .javascript.hljs .hljs-bracket {
+             color: #3a3432
+       }
+
+       .javascript.hljs .hljs-tag {
+             color: #F05B4F;
+             font-weight: 700
+       }
+
+       .javascript.hljs .hljs-link {
+             color: #F4C63D
+       }
+
+       .javascript.hljs .hljs-error{
+             background-color: #F05B4F;
+             color: #453D3F
+       }
+
+       .javascript.hljs .hljs-literal{
+             color: #F05B4F;
+       }
+
+       .javascript.hljs .CodeMirror-activeline-background {
+             background: #e8f2ff!important
+       }
+
+       .javascript.hljs .CodeMirror-matchingbracket {
+             text-decoration: underline;
+             color: #fff!important
+       }
+       .button, button {
+          border-radius: 0;
+          border-style: solid;
+          border-width: 0;
+          cursor: pointer;
+          font-weight: 400;
+          line-height: normal;
+          margin: 5px auto;
+          text-align: center;
+          display: block;
+          padding: 1rem 2rem 1.0625rem;
+          font-size: 1rem;
+          background-color: #F4C63D;
+          border-color: #e7b00d;
+          color: #453D3F;
+       }
+       body {
+          background: #EADBC4;
+          line-height: 1.54;
+          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAIoElEQVRoQ23a7bETOxCE4eNfJxEIBnKBYCAXCAZy4bpVPK4X1XWVWe+uPkYz3T0jHR6/fv16f3t+Pn369Pb8vZ9vP3/+fPv9+/d59uHDh/P748ePb1++fDnXvd937ff+69ev53nH2O+12btd9/n27dtps/vv37+fvnu233tm/I1rfvbs3Z65bly/N8ZjC2HMefB4vAxk8CbfZJuAwfrsGcMsxDg/fvw47TepBTByRqzdjNuzz58/n4WtnUXPlrXbs73veMbZs30ez0bvG3CT7crzovLnz58z2d7tu88G3eC7t5Ddr90+G0t0d7/nM3JjGkNERYyztOOU2dMI7b6fvdv38TT0QGur3+oYaSId5xlGisaitAnvcFuUPmu3T2G4BYn4novC5tsXDG+IQcUcrN3GeTwHeN+Em4yHYRHG17ket0jexZE9X7t994yBu78NFAk8mQPBjYPKm7U3pghxxPo9nv+8M3wT4gjI7B0D/4lpyAv/oLMFMmyTg5boFnbmwTORGjpEcmPsgw9gL2oHWuMIQwqRhQ4BZ8gGQdrd40GVjiDMy3OICNebFIxzyh/PtuCNYZFbhCjjnHkh4HCkqlMJrXQyblcTEQmRgmeT3oJAoTih44NNpbryjV91iggf257GHI7MgyIjZFUxYlAjQXHR2/sSsCrIo/qScE7j1UapqkWmZ/CiDna4chby/OdwZEYg/CYme5VMyWsdB7v1oWR4Jm8Uv+AgQiKC1FUs0V1b0SfrFNJiKveH7F2xRcic87REJZ/I9p2oWf7/8k2rAbmKE6gaR20sBN+7fcguJQSxjXsissxOTkuoarQwU6BFgnKQyIa8ULVoWVniK78Y3nnArVCupJNzue9ExOplVZ7nsV1n3OBUqPGOdq23kHbv9htUW7uBj/mbFwgQ+LrHo5Yzs+uoloRmUlhcAx8lCkFoUcloOWeTi17H4j2QxA2OQGbvIYUjtJfAFZmb65+EOMNhcZ14T701o0go73Vy+aayKZdsvMFvk8tHKmAwLgdV2e0v4kgut23sf1RrC6E2SHQaRZphl1csGHSqWnhQwhaeFQBtKaIM3zE4YHODmMT7eK7qFI3C12wMPgYFge4NZngTHQgyUhTnPbBE4NZb5pf4umUAKbmpOWvtFtnDkXLhzsbIfReGSoQZTqJvkUDUliHkXQQtrsbuHdg06a2NfQnnK4tOrVWF2QC8A88w7NrSYgtp2QKGhZ5MTJblBeOo61TZ99ZBBMBc1HHlFI3L7LRdSU2pLAhMNgAZtmDhVkjWaIaKMrJ6brHNXxxDGETBItlSDr9Uq+UIzLXmbw2FuMp0RnRvwgGEQZUAYozs9rkQolhbxBzTYrSqyZazkEFLYiKRMwQ516jlOYnmZfmCAMwg4kBeK7Ptt/koEA6KtFquiXDt5SV83HwnITazrxFviIK6SEli+7q2xW5LFp7CsW7OWhmAi1OUe5EkVuLT3qKb804Zvxc9ZKDXrTqVIyX82nUnx0hXOaEFn7wAZjjWOqpOKxxbEkGJyv11HGS/AV4mF/ritAluz220SCjxUAyq4dRUpBNhuxNVTYCqqDRaxuWEzX8iAqsiUQIjLo/JG/q09mIYLzF8V1iWW8CpUZQGNiaSN7FyqoW3TDoRoctICf+wWfUhBEgucd11U0sLcGzyAzse7x6n0muvtHbykLyF+IfsiwjsyZpVIrtGE5LJlhAWKtsPpqQTVBkqAgxshIzNgfKO6NuDiBiInkT5/L7fW1aTKiBBY/c9uqwE2ra2r0iTcIpnHA7ALcc/EvKdweWqXbvxO5l98gsWFML+Gx9kdFHZRJXAPRchk1EeC5vRcsz6tswh08hrHm1EWj8VAViv/atoRNSqBDViNA92J2hRnRwpi29Khxvr5/QFlERm/XryiVu2CERB/9eeXdJTqth/bwCliER5e0+YqRu+Vfn2W1L0nndxiXNEtAJxn9TL9o3y2Y8gt9KCcZukpIZZHtt7OaLPkFDoQZWXGd1Dc326zUVyTlBQgi2oTlxep/EGR7h16p7jKMPfo6EmPpGS5e1tJDBwxD81FGVTCuGH7XLrNGe+PeieDVRs719bXcZV0lo6W6g8ghPdq/AmbvSKoBwE5yBZjh4Vus6OQQ5MRUMRe+SX56vxapkS7az87/7dORWptCBjSaoMx0Oe7zmA7W35YXzP1H0SI7tUD6/ql4fkDKGDY1zpbm5tW4brC264xnsihFu83vIH9PAWB1Xmu7eIRvWUKLzqRbM3Y9RhJaUkaDHe2fysr8WprXrgxsv1esui5hoRsmjbYVA/EYE7k/J0t68iZPAWdrhxY5taySHln3H0ZSCoNIfham0gvbj6Ovut7OFKC7kNUhlcG0rVUxT7/h4lKQLLN1zq9mDGO6UUJerWqEvCuHXK+EVEIuQl4YL1e0MjKZrMoZtaCgxnLPjVw7J7YSZrF+b/V1ByAHGR605EeAL5bGqEuaRtXbX3zQPai+7GKTElRIT198pGF7/AaG3x695p1jmnjFdOrPN+C1nrpzvrW9Da87rMv3tbZ/mh+t+q2WJ4li2M7O7RH6OoXkXlZPZm525t10GZAXY9LVHSW4ykirgMJiI9hAARzrsr6FvlCA9FxUV2HY5Udr2QwBRoDhkaCVzAMd4sR0S1BO2f7Rycg2PnNRe1U6IQnkbmpVogoMYxSHnSMy2evMsRELEYGJ8nlSPgu/suVNW9vlLArreorP+QYWEb49RaQm/Q+xyqRz5C2xKCXKvHdu1envrU+/DNaOPeXOy2d79V2UoVtHjVWpQDYVtmkFHhv//ypI8oURzR4XmVdc+HVcXgyRmqZl4v37xTYW/cc2SqGGw9VW44USSfd7kCw/YL3svoFtKECrKMAmVOKxSJThMvfhjnddLYfbH0j6DdWzRjN9uDAEwr9rqpaja3xzCHxZ5t69//fICTajLnwlTSHBvjP9uuEN4BiDLbAAAAAElFTkSuQmCC);
+          background-position: 50% 50%;
+          background-repeat: repeat repeat;
+       }
     </style>
 </head>
 <body>
-    <div style="max-width: 700px; margin: 0 auto;">
-        <div class="ct-chart ct-chart-line"></div>
-        <div class="ct-chart ct-chart-pie"></div>
-        <div class="ct-chart ct-chart-bar"></div>
-    </div>
+   <div style="max-width: 700px; margin: 0 auto 40px auto;">
+      <h1>chartist-plugin-legend examples</h1>
+      <h2>basic examples</h2>
+      <h3>Line Chart:</h3>
+      <div class="ct-chart ct-chart-line"></div>
+      <button class="button-showcode">Show Code</button>
+      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend()
+   ]
+});</code></pre>
+      <h3>Pie Chart:</h3>
+      <div class="ct-chart ct-chart-pie"></div>
+      <button class="button-showcode">Show Code</button>
+      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Pie('.ct-chart-pie', {
+    labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
+    series: [20, 10, 30, 40]
+}, {
+    showLabel: false,
+    plugins: [
+        Chartist.plugins.legend()
+    ]
+});</code></pre>
+      <h3>Bar Chart:</h3>
+      <div class="ct-chart ct-chart-bar"></div>
+      <button class="button-showcode">Show Code</button>
+      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Bar('.ct-chart-bar', {
+   labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
+   series: [
+       { "name": "Money A", "data": [60000, 40000, 80000, 70000] },
+       { "name": "Money B", "data": [40000, 30000, 70000, 65000] },
+       { "name": "Money C", "data": [8000, 3000, 10000, 6000] }
+   ]
+}, {
+   plugins: [
+       Chartist.plugins.legend()
+   ]
+});</code></pre>
+      <h2>examples with options</h2>
+      <h3>Chart with <i>className</i>:</h3>
+      <span>Adds a class to the <code>ul</code> element.</span>
+      <div class="ct-chart-line-classname"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-classname', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          className: 'crazyPink'
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>clickable</i>:</h3>
+      <span>Sets the legends clickable state; when clicked the corresponding series will disappear.</span>
+      <div class="ct-chart-line-clickable"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-clickable', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          clickable: false
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>legendNames</i>:</h3>
+      <span>Sets custom legend names. By default the <code>name</code> property of the series will be used if none are given.</span>
+      <div class="ct-chart-line-legendnames"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-legendnames', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       [12, 9, 7, 8, 5],
+       [2, 1, 3.5, 7, 3],
+       [1, 3, 4, 5, 6]
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          legendNames: ['Custom title', 'Another one', 'And the last one'],
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>onClick</i>:</h3>
+      <span>Accepts a function that gets invoked if <code>clickable</code> is true. The function has the <code>chart</code>, and the click event (<code>e</code>), as arguments.</span>
+      <div class="ct-chart-line-onclick"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-onclick', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          onClick: function () {
+             alert('Somebody clicked a legend!');
+          }
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>classNames</i>:</h3>
+      <span>Accepts a array of strings as long as the chart's series, those will be added as classes to the <code>li</code> elements.</span>
+      <div class="ct-chart-line-classnames"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-classnames', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          classNames: ['','ct-hidden','']
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>removeAll</i>:</h3>
+      <span>Allow all series to be removed at once.</span>
+      <div class="ct-chart-line-removeall"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-removeall', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          removeAll: true
+       })
+   ]
+});</code></pre>
+      <h3>Chart with <i>position</i>:</h3>
+      <span>Sets the position of the legend element. <code>top</code> and <code>bottom</code> are currently accepted.</span>
+      <div class="ct-chart-line-position"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-position', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          position: 'bottom'
+       })
+   ]
+});</code></pre>
+   </div>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+   <script>hljs.initHighlightingOnLoad();</script>
+   <script>
+      var deleteLink = document.querySelectorAll('.button-showcode');
+      for (var i = 0; i < deleteLink.length; i++)
+      {
+         deleteLink[i].addEventListener('click', function (event)
+         {
+            var el = this.nextSibling.nextSibling;
+            var className = 'codeblock-hidden';
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.js"></script>
-    <script src="chartist-plugin-legend.js"></script>
+            var classes = el.className.split(' ');
+            var existingIndex = classes.indexOf(className);
 
-    <script>
-        new Chartist.Line('.ct-chart-line', {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            series: [
-                [12, 9, 7, 8, 5],
-                [2, 1, 3.5, 7, 3],
-                [1, 3, 4, 5, 6]
-            ]
-        }, {
-            fullWidth: true,
-            chartPadding: {
-                right: 40
-            },
-            plugins: [
-                Chartist.plugins.legend({
-                    legendNames: ['Blue pill', 'Red pill', 'Purple pill'],
-                })
-            ]
-        });
+            if (existingIndex >= 0)
+            {
+               this.textContent = "Hide Code";
+               classes.splice(existingIndex, 1);
+            }
+            else
+            {
+               this.textContent = "Show Code";
+               classes.push(className);
+            }
 
-        new Chartist.Pie('.ct-chart-pie', {
-            labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
-            series: [20, 10, 30, 40]
-        }, {
-            showLabel: false,
-            plugins: [
-                Chartist.plugins.legend()
-            ]
-        });
+            el.className = classes.join(' ');
+         });
+      }
+   </script>
+   <script src="chartist-plugin-legend.js"></script>
 
-        new Chartist.Bar('.ct-chart-bar', {
-            labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
-            series: [
-                {"name": "Money A", "data": [60000, 40000, 80000, 70000]},
-                {"name": "Money B", "data": [40000, 30000, 70000, 65000]},
-                {"name": "Money C", "data": [8000, 3000, 10000, 6000]}
-            ]
-        }, {
-            plugins: [
-                Chartist.plugins.legend()
-            ]
-        });
-    </script>
+   <script>
+      new Chartist.Line('.ct-chart-line', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             [12, 9, 7, 8, 5],
+             [2, 1, 3.5, 7, 3],
+             [1, 3, 4, 5, 6]
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                legendNames: ['Blue pill', 'Red pill', 'Purple pill'],
+             })
+         ]
+      });
+
+      new Chartist.Pie('.ct-chart-pie', {
+         labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
+         series: [20, 10, 30, 40]
+      }, {
+         showLabel: false,
+         plugins: [
+             Chartist.plugins.legend()
+         ]
+      });
+
+      new Chartist.Bar('.ct-chart-bar', {
+         labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
+         series: [
+             { "name": "Money A", "data": [60000, 40000, 80000, 70000] },
+             { "name": "Money B", "data": [40000, 30000, 70000, 65000] },
+             { "name": "Money C", "data": [8000, 3000, 10000, 6000] }
+         ]
+      }, {
+         plugins: [
+             Chartist.plugins.legend()
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-classname', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                className: 'crazyPink'
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-clickable', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                clickable: false
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-legendnames', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             [12, 9, 7, 8, 5],
+             [2, 1, 3.5, 7, 3],
+             [1, 3, 4, 5, 6]
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                legendNames: ['Custom title', 'Another one', 'And the last one'],
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-onclick', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                onClick: function ()
+                {
+                   alert('Somebody clicked a legend!');
+                }
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-classnames', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                classNames: ['ct-dimmed', 'ct-hidden', '']
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-removeall', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                removeAll: true
+             })
+         ]
+      });
+
+      new Chartist.Line('.ct-chart-line-position', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                position: 'bottom'
+             })
+         ]
+      });
+   </script>
 </body>
+
 </html>
