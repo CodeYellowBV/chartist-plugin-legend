@@ -114,10 +114,8 @@ describe('Chartist plugin legend', function() {
         it('should not insert legend twice', function () {
             window.Chartist.plugins.legend()(chart);
             // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
-            chart.on('created', function ()
-            {
-               setTimeout(function ()
-               {
+            chart.on('created', function () {
+               setTimeout(function () {
                   var matches = chart.container.querySelectorAll('ul.ct-legend');
                   expect(matches.length).to.equal(1);
 
@@ -212,10 +210,8 @@ describe('Chartist plugin legend', function() {
             chart = generateChart('Line', chartDataLine, { className: 'bananas' });
 
             // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
-            chart.on('created', function ()
-            {
-               setTimeout(function ()
-               {
+            chart.on('created', function () {
+               setTimeout(function () {
                   var legend = chart.container.querySelector('ul.ct-legend');
                   expect(legend.classList[1]).to.equal('bananas');
                   destroyChart();
@@ -230,10 +226,8 @@ describe('Chartist plugin legend', function() {
            chart = generateChart('Line', chartDataLine, { classNames: classNames });
 
            // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
-           chart.on('created', function ()
-           {
-              setTimeout(function ()
-              {
+           chart.on('created', function () {
+              setTimeout(function () {
                  var legend = chart.container.querySelector('ul.ct-legend');
 
                  expect(chart.data.series.length).to.equal(3);
@@ -244,6 +238,36 @@ describe('Chartist plugin legend', function() {
                  done();
 
               }, 10)
+           });
+        });
+
+        describe('allow custom positioning', function () {
+           it('should allow top positioning', function (done) {
+              chart = generateChart('Line', chartDataLine, { position: 'top' });
+
+              // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
+              chart.on('created', function () {
+                 setTimeout(function () {
+                    expect(chart.container.childNodes.length).to.equal(2);
+                    var listElement = chart.container.querySelector("ul");
+                    expect(chart.container.childNodes[0]).to.equal(listElement);
+                    done();
+                 }, 10)
+              });
+           });
+
+           it('should allow bottom positioning', function (done) {
+              chart = generateChart('Line', chartDataLine, { position: 'bottom' });
+
+              // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
+              chart.on('created', function () {
+                 setTimeout(function () {
+                    expect(chart.container.childNodes.length).to.equal(2);
+                    var listElement = chart.container.querySelector("ul");
+                    expect(chart.container.childNodes[1]).to.equal(listElement);
+                    done();
+                 }, 10)
+              });
            });
         });
 
