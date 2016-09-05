@@ -42,6 +42,19 @@
             return a - b;
         }
 
+        // Parse input position string to enum
+        if (options && options.position) {
+           if (typeof options.position === 'string') {
+              options.position = options.position.toLowerCase();
+           }
+           options.position = positionEnum[options.position];
+           // Catch invalid parses
+           if (options.position === undefined)
+           {
+              throw Error('The position you entered is not a valid position')
+           }
+        }
+
         options = Chartist.extend({}, defaultOptions, options);
 
         return function legend(chart) {
@@ -89,6 +102,8 @@
             }
             legendNames = options.legendNames || legendNames;
 
+            console.log(legendNames);
+
             // Check if given class names are viable to append to legends
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
@@ -106,7 +121,21 @@
                li.textContent = legend.name || legend;
                legendElement.appendChild(li);
             }
-            chart.container.appendChild(legendElement);
+            console.log(legendElement);
+
+            chart.on('created', function (data) {
+               console.log(legendElement);
+               // Append the legend element to the DOM
+               switch (options.position) {
+                  case positionEnum.top:
+                     chart.container.appendChild(legendElement);
+                     break;
+
+                  case positionEnum.bottom:
+                     chart.container.insertBefore(legendElement, null);
+                     break;
+               }
+            });
 
             if (options.clickable) {
                 legendElement.addEventListener('click', function (e) {
