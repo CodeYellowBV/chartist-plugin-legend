@@ -19,11 +19,6 @@
      */
     'use strict';
 
-    var positionEnum = {
-       top: 0,
-       bottom: 1
-    };
-
     var defaultOptions = {
         className: '',
         classNames: false,
@@ -31,7 +26,7 @@
         legendNames: false,
         clickable: true,
         onClick: null,
-        position: positionEnum.top
+        position: 'top'
     };
 
     Chartist.plugins = Chartist.plugins || {};
@@ -42,16 +37,9 @@
             return a - b;
         }
 
-        // Parse input position string to enum
-        if (options && options.position) {
-           if (typeof options.position === 'string') {
-              options.position = options.position.toLowerCase();
-           }
-           options.position = positionEnum[options.position];
-           // Catch invalid parses
-           if (options.position === undefined) {
-              throw Error('The position you entered is not a valid position')
-           }
+        // Catch invalid options
+        if (options.position && options.position !== 'top' || options.position !== 'bottom') {
+           throw Error('The position you entered is not a valid position')
         }
 
         options = Chartist.extend({}, defaultOptions, options);
@@ -121,11 +109,11 @@
             chart.on('created', function (data) {
                // Append the legend element to the DOM
                switch (options.position) {
-                  case positionEnum.top:
+                  case '.top':
                      chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
                      break;
 
-                  case positionEnum.bottom:
+                  case '.bottom':
                      chart.container.insertBefore(legendElement, null);
                      break;
                }
