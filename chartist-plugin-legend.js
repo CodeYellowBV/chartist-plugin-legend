@@ -49,8 +49,7 @@
            }
            options.position = positionEnum[options.position];
            // Catch invalid parses
-           if (options.position === undefined)
-           {
+           if (options.position === undefined) {
               throw Error('The position you entered is not a valid position')
            }
         }
@@ -102,8 +101,6 @@
             }
             legendNames = options.legendNames || legendNames;
 
-            console.log(legendNames);
-
             // Check if given class names are viable to append to legends
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
@@ -113,22 +110,19 @@
                var li = document.createElement('li');
                li.className = 'ct-series-' + legendNamesIndex;
                // Append specific class to a legend element, if viable classes are given
-               if (classNamesViable)
-               {
+               if (classNamesViable) {
                   li.className += ' ' + options.classNames[legendNamesIndex];
                }
                li.setAttribute('data-legend', legendNamesIndex);
                li.textContent = legend.name || legend;
                legendElement.appendChild(li);
             }
-            console.log(legendElement);
 
             chart.on('created', function (data) {
-               console.log(legendElement);
                // Append the legend element to the DOM
                switch (options.position) {
                   case positionEnum.top:
-                     chart.container.appendChild(legendElement);
+                     chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
                      break;
 
                   case positionEnum.bottom:
@@ -152,10 +146,9 @@
                         removedSeries.splice(removedSeriesIndex, 1);
                         li.classList.remove('inactive');
                     } else {
-                        if (!options.removeAll){
+                        if (!options.removeAll) {
                              // Remove from series, only if a minimum of one series is still visible.
-                          if ( chart.data.series.length > 1)
-                          {
+                          if ( chart.data.series.length > 1) {
                              removedSeries.push(seriesIndex);
                              li.classList.add('inactive');
                           }
@@ -163,8 +156,7 @@
                           else {
                              removedSeries = [];
                              var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             for (var seriesItemsIndex = 0, length = seriesItems.length; seriesItemsIndex < length; seriesItemsIndex++)
-                             {
+                             for (var seriesItemsIndex = 0, length = seriesItems.length; seriesItemsIndex < length; seriesItemsIndex++) {
                                 seriesItems[seriesItemsIndex].classList.remove('inactive');
                              }
                           }
@@ -186,12 +178,10 @@
                     // Reverse sort the removedSeries to prevent removing the wrong index.
                     removedSeries.sort(compareNumbers).reverse();
 
-                    for (var removedSeriesIndex = 0, length = removedSeries.length; removedSeriesIndex < removedSeries.length; removedSeriesIndex++)
-                    {
+                    for (var removedSeriesIndex = 0, length = removedSeries.length; removedSeriesIndex < removedSeries.length; removedSeriesIndex++) {
                        var series = removedSeries[removedSeriesIndex];
                        seriesCopy.splice(series, 1);
-                       if (useLabels)
-                       {
+                       if (useLabels) {
                           labelsCopy.splice(series, 1);
                        }
                     }
