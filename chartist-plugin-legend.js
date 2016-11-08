@@ -43,7 +43,7 @@
               throw Error('The position you entered is not a valid position');
            }
            if(options.position instanceof HTMLElement){
-              // Detatch DOM element from options object, as circular references will cause breaking memory leaks
+              // Detatch DOM element from options object, because Chartist.extend currently chokes on circular references present in HTMLElements
               var cachedDOMPosition = options.position;
               delete options.position;
            }
@@ -52,7 +52,7 @@
         options = Chartist.extend({}, defaultOptions, options);
 
         if(cachedDOMPosition){
-            // Reattatch the DOM position
+            // Reattatch the DOM Element position if it was removed before
             options.position = cachedDOMPosition
         }
 
