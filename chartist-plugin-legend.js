@@ -39,12 +39,22 @@
 
         // Catch invalid options
         if (options && options.position) {
-           if (!(options.position === 'top' || options.position === 'bottom')) {
+           if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
               throw Error('The position you entered is not a valid position');
+           }
+           if(options.position instanceof HTMLElement){
+              // Detatch DOM element from options object, because Chartist.extend currently chokes on circular references present in HTMLElements
+              var cachedDOMPosition = options.position;
+              delete options.position;
            }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
+
+        if(cachedDOMPosition){
+            // Reattatch the DOM Element position if it was removed before
+            options.position = cachedDOMPosition
+        }
 
         return function legend(chart) {
             var existingLegendElement = chart.container.querySelector('.ct-legend');
@@ -109,14 +119,21 @@
 
             chart.on('created', function (data) {
                // Append the legend element to the DOM
-               switch (options.position) {
-                  case 'top':
-                     chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
-                     break;
+               if(!(options.position instanceof HTMLElement))
+               {
+                  switch (options.position) {
+                     case 'top':
+                        chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
+                        break;
 
-                  case 'bottom':
-                     chart.container.insertBefore(legendElement, null);
-                     break;
+                     case 'bottom':
+                        chart.container.insertBefore(legendElement, null);
+                        break;
+                   }
+               }
+               else {
+                  // Appends the legend element as the last child of a given HTMLElement
+                  options.position.insertBefore(legendElement, null);
                }
             });
 

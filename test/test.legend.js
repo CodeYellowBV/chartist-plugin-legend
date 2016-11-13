@@ -269,6 +269,26 @@ describe('Chartist plugin legend', function() {
                  }, 10)
               });
            });
+            
+           it('should allow positioning to any DOM2 element', function (done) {
+              var testDOMElement = document.createElement('div');
+              document.body.insertBefore(testDOMElement , null);
+
+              chart = generateChart('Line', chartDataLine, { position: testDOMElement });
+
+              // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
+              chart.on('created', function () {
+                 setTimeout(function () {
+                    expect(testDOMElement.childNodes.length).to.equal(1);
+                    var listElement = testDOMElement.querySelector("ul");
+                    expect(testDOMElement.childNodes[0]).to.equal(listElement);
+                     
+                     // Clean up
+                    document.body.removeChild(testDOMElement);
+                    done();
+                 }, 100)
+              });
+           });
         });
 
         it('should allow to remove all series at once', function () {

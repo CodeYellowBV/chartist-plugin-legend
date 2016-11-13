@@ -79,4 +79,4 @@ new Chartist.Bar('.ct-chart', data, {
 | `onClick` | Accepts a function that gets invoked if `clickable` is true. The function has the `chart`, and the click event (`e`), as arguments. | `mixed` | `false` |
 | `classNames` | Accepts a array of strings as long as the chart's series, those will be added as classes to the `li` elements. | `mixed` | `false` |
 | `removeAll` | Allow all series to be removed at once. | `bool` | `false` |
-| `position` | Sets the position of the legend element. `top`and `bottom`are currently accepted. | `'top'|'bottom'` | `'top'` |
+| `position` | Sets the position of the legend element. `top`, `bottom` or any DOM2 Element are currently accepted. If a DOM Element is given, the legend will be appended as it's last child. | `'top'|'bottom'|HTMLElement` | `'top'` |
