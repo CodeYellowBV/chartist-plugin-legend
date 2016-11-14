@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -100,6 +100,11 @@
        .crazyPink ~ svg .ct-series-c .ct-line, .crazyPink ~ svg .ct-series-c .ct-point {
           stroke: #F06292;
        }
+       
+       #any-div-anywhere{
+           border: 1px solid #5b4421;
+       }
+
        /* Page styling */
        h1, h2, h3{
           color: #5b4421;
@@ -232,210 +237,59 @@
       <h3>Line Chart:</h3>
       <div class="ct-chart ct-chart-line"></div>
       <button class="button-showcode">Show Code</button>
-      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend()
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Pie Chart:</h3>
       <div class="ct-chart ct-chart-pie"></div>
       <button class="button-showcode">Show Code</button>
-      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Pie('.ct-chart-pie', {
-    labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
-    series: [20, 10, 30, 40]
-}, {
-    showLabel: false,
-    plugins: [
-        Chartist.plugins.legend()
-    ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Bar Chart:</h3>
       <div class="ct-chart ct-chart-bar"></div>
       <button class="button-showcode">Show Code</button>
-      <pre class="codeblock-hidden"><code class="javascript">new Chartist.Bar('.ct-chart-bar', {
-   labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
-   series: [
-       { "name": "Money A", "data": [60000, 40000, 80000, 70000] },
-       { "name": "Money B", "data": [40000, 30000, 70000, 65000] },
-       { "name": "Money C", "data": [8000, 3000, 10000, 6000] }
-   ]
-}, {
-   plugins: [
-       Chartist.plugins.legend()
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h2>examples with options</h2>
       <h3>Chart with <i>className</i>:</h3>
       <span>Adds a class to the <code>ul</code> element.</span>
       <div class="ct-chart-line-classname"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-classname', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          className: 'crazyPink'
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Chart with <i>clickable</i>:</h3>
       <span>Sets the legends clickable state; setting this value to <code>false</code> disables toggling graphs on legend click.</span>
       <div class="ct-chart-line-clickable"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-clickable', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          clickable: false
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Chart with <i>legendNames</i>:</h3>
       <span>Sets custom legend names. By default the <code>name</code> property of the series will be used if none are given.</span>
       <div class="ct-chart-line-legendnames"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-legendnames', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       [12, 9, 7, 8, 5],
-       [2, 1, 3.5, 7, 3],
-       [1, 3, 4, 5, 6]
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          legendNames: ['Custom title', 'Another one', 'And the last one'],
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Chart with <i>onClick</i>:</h3>
       <span>Accepts a function that gets invoked if <code>clickable</code> is true. The function has the <code>chart</code>, and the click event (<code>e</code>), as arguments.</span>
       <div class="ct-chart-line-onclick"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-onclick', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          onClick: function () {
-             alert('Somebody clicked a legend!');
-          }
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Chart with <i>classNames</i>:</h3>
       <span>Accepts a array of strings as long as the chart's series, those will be added as classes to the <code>li</code> elements.</span>
       <div class="ct-chart-line-classnames"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-classnames', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          classNames: ['','ct-hidden','']
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
       <h3>Chart with <i>removeAll</i>:</h3>
       <span>Allow all series to be removed at once.</span>
       <div class="ct-chart-line-removeall"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-removeall', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          removeAll: true
-       })
-   ]
-});</code></pre>
-      <h3>Chart with <i>position</i>:</h3>
-      <span>Sets the position of the legend element. <code>top</code> and <code>bottom</code> are currently accepted.</span>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
+      <h3>Chart with <i>position 'bottom'</i>:</h3>
+      <span>Sets the position of the legend element. <code>top</code>, <code>bottom</code>or any DOM2 Element are currently accepted. If a DOM Element is given, the legend will be appended as it's last child.</span>
       <div class="ct-chart-line-position"></div>
       <button class="button-showcode">Show Code</button>
-<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-position', {
-   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-   series: [
-       { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-       { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-       { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-   ]
-}, {
-   fullWidth: true,
-   chartPadding: {
-      right: 40
-   },
-   plugins: [
-       Chartist.plugins.legend({
-          position: 'bottom'
-       })
-   ]
-});</code></pre>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>      
+      <h3>Chart with <i>a DOM2 Element position</i>:</h3>
+      <div id="any-div-anywhere"></div>
+      <div class="ct-chart-line-position-dom"></div>
+      <button class="button-showcode">Show Code</button>
+      <pre class="codeblock-hidden"><code class="javascript"></code></pre>
    </div>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
-   <script>hljs.initHighlightingOnLoad();</script>
    <script>
       var deleteLink = document.querySelectorAll('.button-showcode');
       for (var i = 0; i < deleteLink.length; i++)
@@ -462,188 +316,269 @@
             el.className = classes.join(' ');
          });
       }
+
+      var implementAndDocumentFunctionByClass = function(implementation,className){
+         implementation();
+         var implementationAsString = implementation.toString().replace('function (){','').slice(0, -1);
+         if(implementationAsString.slice(-1).match(/\n/)){
+             implementationAsString = implementationAsString.slice(0, -1);
+         }
+         if(implementationAsString.charAt(0).match(/\n/)){
+             implementationAsString = implementationAsString.substring(1);
+         }
+         var lineWhiteSpaceArray = [];
+         var smallestWhitespace = Infinity;
+         var lineArray = implementationAsString.split('\n');
+         lineArray.forEach(function(line,index){
+            if(line.match(/^\s*$/)){
+                delete lineArray[index];
+            }
+            else{
+                var whiteSpaces = (line.match(/^\s+/)[0] || '').length;
+                lineWhiteSpaceArray.push(whiteSpaces);
+                if(smallestWhitespace > whiteSpaces){
+                    smallestWhitespace = whiteSpaces;
+                }
+            }
+         });
+         lineArray.forEach(function(line,index){
+            lineArray[index] = line.substring(smallestWhitespace,line.length);
+         });
+         implementationAsString = lineArray.join('\n');
+         document.querySelector('.' + className + ' ~ pre code').innerHTML = implementationAsString;
+      }
    </script>
    <script src="chartist-plugin-legend.js"></script>
 
    <script>
-      new Chartist.Line('.ct-chart-line', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             [12, 9, 7, 8, 5],
-             [2, 1, 3.5, 7, 3],
-             [1, 3, 4, 5, 6]
+
+    var testDOMElement = document.createElement('div');
+    document.body.insertBefore(testDOMElement , null);
+
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            [12, 9, 7, 8, 5],
+            [2, 1, 3.5, 7, 3],
+            [1, 3, 4, 5, 6]
          ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
+    }, {
+        fullWidth: true,
+        chartPadding: {
             right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 legendNames: ['Blue pill', 'Red pill', 'Purple pill'],
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line');
 
-      new Chartist.Pie('.ct-chart-pie', {
-         labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
-         series: [20, 10, 30, 40]
-      }, {
-         showLabel: false,
-         plugins: [
-             Chartist.plugins.legend()
-         ]
-      });
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Pie('.ct-chart-pie', {
+        labels: ['Piece A', 'Piece B', 'Piece C', 'Piece D'],
+        series: [20, 10, 30, 40]
+    }, {
+        showLabel: false,
+        plugins: [
+            Chartist.plugins.legend()
+        ]
+    });
+    },'ct-chart-pie');
 
-      new Chartist.Bar('.ct-chart-bar', {
-         labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
-         series: [
-             { "name": "Money A", "data": [60000, 40000, 80000, 70000] },
-             { "name": "Money B", "data": [40000, 30000, 70000, 65000] },
-             { "name": "Money C", "data": [8000, 3000, 10000, 6000] }
-         ]
-      }, {
-         plugins: [
-             Chartist.plugins.legend()
-         ]
-      });
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Bar('.ct-chart-bar', {
+        labels: ['First quarter of the year', 'Second quarter of the year', 'Third quarter of the year', 'Fourth quarter of the year'],
+        series: [
+            { "name": "Money A", "data": [60000, 40000, 80000, 70000] },
+            { "name": "Money B", "data": [40000, 30000, 70000, 65000] },
+            { "name": "Money C", "data": [8000, 3000, 10000, 6000] }
+        ]
+    }, {
+        plugins: [
+            Chartist.plugins.legend()
+        ]
+    });
+    },'ct-chart-bar');
 
-      new Chartist.Line('.ct-chart-line-classname', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-classname', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 className: 'crazyPink'
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line-classname');
 
-      new Chartist.Line('.ct-chart-line-clickable', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-clickable', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 clickable: false
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line-clickable');
 
-      new Chartist.Line('.ct-chart-line-legendnames', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             [12, 9, 7, 8, 5],
-             [2, 1, 3.5, 7, 3],
-             [1, 3, 4, 5, 6]
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-legendnames', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            [12, 9, 7, 8, 5],
+            [2, 1, 3.5, 7, 3],
+            [1, 3, 4, 5, 6]
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 legendNames: ['Custom title', 'Another one', 'And the last one'],
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line-legendnames');
 
-      new Chartist.Line('.ct-chart-line-onclick', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
-                onClick: function ()
-                {
-                   alert('Somebody clicked a legend!');
-                }
-             })
-         ]
-      });
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-onclick', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
+            onClick: function ()
+            {
+                alert('Somebody clicked a legend!');
+            }
+            })
+        ]
+    });
+    },'ct-chart-line-onclick');
 
-      new Chartist.Line('.ct-chart-line-classnames', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-classnames', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 classNames: ['ct-dimmed', 'ct-hidden', '']
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line-classnames');
 
-      new Chartist.Line('.ct-chart-line-removeall', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
-                removeAll: true
-             })
-         ]
-      });
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-removeall', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
+                classNames: ['ct-dimmed', 'ct-hidden', '']
+            })
+        ]
+    });
+    },'ct-chart-line-removeall');
 
-      new Chartist.Line('.ct-chart-line-position', {
-         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-         series: [
-             { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-             { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
-             { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-         ]
-      }, {
-         fullWidth: true,
-         chartPadding: {
-            right: 40
-         },
-         plugins: [
-             Chartist.plugins.legend({
+    implementAndDocumentFunctionByClass(function(){
+    new Chartist.Line('.ct-chart-line-position', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
                 position: 'bottom'
-             })
-         ]
-      });
+            })
+        ]
+    });
+    },'ct-chart-line-position');
+
+    implementAndDocumentFunctionByClass(function(){
+    var someDiv = document.getElementById('any-div-anywhere');
+    new Chartist.Line('.ct-chart-line-position-dom', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            { "name": "Money A", "data": [12, 9, 7, 8, 5] },
+            { "name": "Money B", "data": [2, 1, 3.5, 7, 3] },
+            { "name": "Money C", "data": [1, 3, 4, 5, 6] }
+        ]
+    }, {
+        fullWidth: true,
+        chartPadding: {
+        right: 40
+        },
+        plugins: [
+            Chartist.plugins.legend({
+                position: someDiv
+            })
+        ]
+    });
+    },'ct-chart-line-position-dom');
+
+
    </script>
+   <script>hljs.initHighlightingOnLoad();</script>
 </body>
 
 </html>
