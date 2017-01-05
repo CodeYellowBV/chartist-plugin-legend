@@ -89,6 +89,10 @@
                 legendElement.classList.add(options.className);
             }
 
+            if (chart.options.width) {
+                legendElement.style.cssText = 'width: ' + chart.options.width + 'px;margin: 0 auto;';
+            }
+
             var removedSeries = [],
                 originalSeries = chart.data.series.slice(0);
 
