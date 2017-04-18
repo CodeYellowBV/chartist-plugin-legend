@@ -1,11 +1,14 @@
 # chartist-plugin-legend
 
-[![Build Status](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend.svg?branch=master)](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend)
-[![Coverage Status](https://coveralls.io/repos/github/CodeYellowBV/chartist-plugin-legend/badge.svg?branch=master)](https://coveralls.io/github/CodeYellowBV/chartist-plugin-legend?branch=master)
-
 Implements a legend for [Chartist](https://github.com/gionkunz/chartist-js) charts.
 
-**[Demo](https://codeyellowbv.github.io/chartist-plugin-legend/)**
+Significantly Forked from Code Yellow BV:
+
+ * To use chartist draw signals so data can be kept live.
+ * To stop using copies of the series data.
+ * To use an inactive class instead of reformatting the series data.
+
+Pie charts and some features maybe effected. Patched welcome.
 
 ## Install
 
@@ -53,6 +56,9 @@ As styles are very different with each project, no CSS is included. You can copy
         }
     }
 }
+.ct-series.inactive {
+  visibility: hidden;
+}
 ```
 
 ## Usage
@@ -62,13 +68,18 @@ In an example chart:
 ```js
 require('chartist-plugin-legend');
 
-new Chartist.Bar('.ct-chart', data, {
+var chart = new Chartist.Bar('.ct-chart', data, {
         stackBars: true,
         plugins: [
             Chartist.plugins.legend()
         ]
     },
 });
+
+...
+
+chart.update(new_data);
+
 ```
 
 | __Option__ | __Description__ | __Type__ | __Default__ |
