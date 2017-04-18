@@ -57,6 +57,25 @@
         }
 
         return function legend(chart) {
+        	function updateChart() {
+        		var newSeries = [];
+                var newLabels = [];
+                
+                for (var i = 0; i < seriesMetadata.length; i++) {
+                   if(seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
+                      newSeries.push(seriesMetadata[i].data);
+                      newLabels.push(seriesMetadata[i].label);
+                   }
+                }
+
+                chart.data.series = newSeries;
+                if (useLabels) {
+                    chart.data.labels = newLabels;
+                }
+
+                chart.update();
+        	}
+        	
             var existingLegendElement = chart.container.querySelector('.ct-legend');
             if (existingLegendElement) {
                 // Clear legend if already existing.
@@ -93,9 +112,6 @@
                 legendElement.style.cssText = 'width: ' + chart.options.width + 'px;margin: 0 auto;';
             }
 
-            var removedSeries = [],
-                originalSeries = chart.data.series.slice(0);
-
             // Get the right array to use for generating the legend.
             var legendNames = chart.data.series,
                 useLabels = isPieChart && chart.data.labels;
@@ -104,12 +120,29 @@
                 legendNames = chart.data.labels;
             }
             legendNames = options.legendNames || legendNames;
+            
+            var legends = [];
+            var seriesMetadata = new Array(chart.data.series.length);
+            var activeLegendCount = 0;
+            
+            // Initialize the array that associates series with legends.
+            // -1 indicates that there is no legend associated with it.
+            for (var i = 0; i < chart.data.series.length; i++) {
+               seriesMetadata[i] = {
+                 data: chart.data.series[i],
+                 label: useLabels ? chart.data.labels[i] : null,
+                 legend: -1
+               };
+            }
 
             // Check if given class names are viable to append to legends
             var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
 
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
+               var legendText = legend.name || legend;
+               var legendSeries = legend.series || [i];
+               
                var li = document.createElement('li');
                li.className = 'ct-series-' + i;
                // Append specific class to a legend element, if viable classes are given
@@ -117,8 +150,20 @@
                   li.className += ' ' + options.classNames[i];
                }
                li.setAttribute('data-legend', i);
-               li.textContent = legend.name || legend;
+               li.textContent = legendText;
                legendElement.appendChild(li);
+               
+               legendSeries.forEach(function(seriesIndex) {
+                  seriesMetadata[seriesIndex].legend = i;
+               });
+               
+               legends.push({
+                  text: legendText,
+                  series: legendSeries,
+                  active: true
+               });
+               
+               activeLegendCount++;
             });
 
             chart.on('created', function (data) {
@@ -148,66 +193,38 @@
                         return;
                     e.preventDefault();
 
-                    var seriesIndex = parseInt(li.getAttribute('data-legend')),
-                        removedSeriesIndex = removedSeries.indexOf(seriesIndex);
+                    var legendIndex = parseInt(li.getAttribute('data-legend'));
+                    var legend = legends[legendIndex];
 
-                    if (removedSeriesIndex > -1) {
-                        // Add to series again.
-                        removedSeries.splice(removedSeriesIndex, 1);
+                    if (!legends[legendIndex].active) {
+                        legend.active = true;
+                        activeLegendCount++;
                         li.classList.remove('inactive');
                     } else {
-                        if (!options.removeAll) {
-                             // Remove from series, only if a minimum of one series is still visible.
-                          if ( chart.data.series.length > 1) {
-                             removedSeries.push(seriesIndex);
-                             li.classList.add('inactive');
-                          }
-                             // Set all series as active.
-                          else {
-                             removedSeries = [];
-                             var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             seriesItems.forEach(function (item) {
-                                item.classList.remove('inactive');
-                             });
-                          }
-                       }
-                       else {
-                          // Remove series unaffected if it is the last or not
-                          removedSeries.push(seriesIndex);
-                          li.classList.add('inactive');
+                        legend.active = false;
+                        activeLegendCount--;
+                        li.classList.add('inactive');
+                        
+                        if (!options.removeAll && activeLegendCount == 0) {
+                           //If we can't disable all series at the same time, let's
+                           //reenable all of them:
+                           for (var i = 0; i < legends.length; i++) {
+                              legends[i].active = true;
+                              activeLegendCount++;
+                              legendElement.childNodes[i].classList.remove('inactive');
+                           }
                        }
                     }
-
-                    // Reset the series to original and remove each series that
-                    // is still removed again, to remain index order.
-                    var seriesCopy = originalSeries.slice(0);
-                    if (useLabels) {
-                        var labelsCopy = originalLabels.slice(0);
-                    }
-
-                    // Reverse sort the removedSeries to prevent removing the wrong index.
-                    removedSeries.sort(compareNumbers).reverse();
-
-                    removedSeries.forEach(function (series) {
-                        seriesCopy.splice(series, 1);
-                        if (useLabels) {
-                            labelsCopy.splice(series, 1);
-                        }
-                    });
-
+                    
+                    updateChart();
+                    
                     if (options.onClick) {
                         options.onClick(chart, e);
                     }
-
-                    chart.data.series = seriesCopy;
-                    if (useLabels) {
-                        chart.data.labels = labelsCopy;
-                    }
-
-                    chart.update();
                 });
             }
-
+            
+            updateChart();
         };
 
     };

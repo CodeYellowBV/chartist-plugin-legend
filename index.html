@@ -70,6 +70,20 @@
            background-color: #453d3f;
            border-color: #453d3f;
        }
+       
+       .ct-chart-line-multipleseries .ct-legend .ct-series-0:before {
+           background-color: #d70206;
+           border-color: #d70206;
+       }
+       
+       .ct-chart-line-multipleseries .ct-legend .ct-series-1:before {
+           background-color: #f4c63d;
+           border-color: #f4c63d;
+       }
+       
+       .ct-chart-line-multipleseries .ct-legend li.inactive:before {
+           background: transparent;
+       }
 
        .crazyPink li.ct-series-0:before {
           background-color: #C2185B;
@@ -342,6 +356,28 @@
        })
    ]
 });</code></pre>
+      <h3>Chart with multiple series per item:</h3>
+      <span>The <code>legendNames</code> property can be used to associate multiple series with a legend item.</span>
+      <div class="ct-chart-line-multipleseries"></div>
+      <button class="button-showcode">Show Code</button>
+<pre class="codeblock-hidden"><code class="javascript">new Chartist.Line('.ct-chart-line-multipleseries', {
+   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+   series: [
+       [12, 9, 7, 8, 5],
+       [2, 1, 3.5, 7, 3],
+       [1, 3, 4, 5, 6]
+   ]
+}, {
+   fullWidth: true,
+   chartPadding: {
+      right: 40
+   },
+   plugins: [
+       Chartist.plugins.legend({
+          legendNames: [{name: 'Red-ish', series: [0,1]}, {name: 'Yellow', series: [2]}],
+       })
+   ]
+});</code></pre>
       <h3>Chart with <i>onClick</i>:</h3>
       <span>Accepts a function that gets invoked if <code>clickable</code> is true. The function has the <code>chart</code>, and the click event (<code>e</code>), as arguments.</span>
       <div class="ct-chart-line-onclick"></div>
@@ -561,6 +597,25 @@
          plugins: [
              Chartist.plugins.legend({
                 legendNames: ['Custom title', 'Another one', 'And the last one'],
+             })
+         ]
+      });
+      
+      new Chartist.Line('.ct-chart-line-multipleseries', {
+         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+         series: [
+             [12, 9, 7, 8, 5],
+             [2, 1, 3.5, 7, 3],
+             [1, 3, 4, 5, 6]
+         ]
+      }, {
+         fullWidth: true,
+         chartPadding: {
+            right: 40
+         },
+         plugins: [
+             Chartist.plugins.legend({
+                legendNames: [{name: 'Red-ish', series: [0,1]}, {name: 'Yellow', series: [2]}],
              })
          ]
       });
