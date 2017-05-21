@@ -33,10 +33,6 @@
 
     Chartist.plugins.legend = function (options) {
 
-        function compareNumbers(a, b) {
-            return a - b;
-        }
-
         // Catch invalid options
         if (options && options.position) {
            if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
@@ -223,8 +219,6 @@
                     }
                 });
             }
-            
-            updateChart();
         };
 
     };

@@ -402,9 +402,128 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
+                
+                //Clicking on an inactive series should also call the function.
+                chart.legendClicked = false;
+                click(seriesB);
+                expect(chart.legendClicked).to.equal(true);
             });
         });
+        
+        describe('clickable with multiple series per legend item', function() {
+            before(function(done) {
+                chart = generateChart('Line', chartDataLine, {
+                    clickable: true,
+                    onClick: function(chart,e) {
+                        chart.legendClicked = true;
+                    },
+                    legendNames: [{name: 'Red-ish', series: [0,1]}, {name: 'Yellow', series: [2]}]
+                });
 
+                chart.on('created', function() {
+                    chart.off('created');
+                    done();
+                });
+            });
+
+            after(destroyChart);
+
+            it('should enforce a className for each series', function() {
+                expect(chart.data.series[0].className).to.equal('ct-series-a');
+                expect(chart.data.series[1].className).to.equal('ct-series-b');
+                expect(chart.data.series[2].className).to.equal('ct-series-c');
+            });
+
+            it('should hide a series after a click on the legend item', function() {
+                var seriesA = chart.container.querySelector('ul.ct-legend > .ct-series-0');
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                expect(chart.data.series.length).to.equal(3);
+
+                // Clicking on the second legend item should hide the last series:
+                click(seriesB);
+                expect(chart.data.series.length).to.equal(2);
+                expect(chart.data.series[0].name).to.equal('Blue pill');
+                expect(chart.data.series[1].name).to.equal('Red pill');
+                var svgSeries = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries.length).to.equal(2);
+                expect(svgSeries[0].className.baseVal).to.contain('ct-series-a');
+                expect(svgSeries[1].className.baseVal).to.contain('ct-series-b');
+
+                // A second click should show the corresponding series again.
+                click(seriesB);
+                var svgSeries2 = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries2.length).to.equal(3);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
+                
+                // Clicking on the first legend item should hide the two first series:
+                click(seriesA);
+                expect(chart.data.series.length).to.equal(1);
+                expect(chart.data.series[0].name).to.equal('Purple pill');
+                var svgSeries = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries.length).to.equal(1);
+                expect(svgSeries[0].className.baseVal).to.contain('ct-series-c');
+
+                // A second click should show the both series again.
+                click(seriesA);
+                var svgSeries2 = chart.container.querySelectorAll('g.ct-series');
+                expect(svgSeries2.length).to.equal(3);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
+
+                // A click in the last active series should set all series active again.
+                click(seriesA);
+                expect(chart.data.series.length).to.equal(1);
+                expect(chart.data.series[0].name).to.equal('Purple pill');
+                click(seriesB);
+                expect(svgSeries2.length).to.equal(3);
+                expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
+                expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
+                expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
+            });
+
+            it('should update the legend item classes', function() {
+                var seriesA = chart.container.querySelector('ul.ct-legend > .ct-series-0');
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                // The first click should hide the corresponding series.
+                click(seriesB);
+                var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
+                expect(legendItems[0].className).to.equal('ct-series-0');
+                expect(legendItems[1].className).to.equal('ct-series-1 inactive');
+
+                // A second click should show the corresponding series again.
+                click(seriesB);
+                var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
+                expect(inactiveItem.length).to.equal(0);
+
+                // A click in the last active series should set all series active again.
+                click(seriesA);
+                var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
+                expect(legendItems[0].className).to.equal('ct-series-0 inactive');
+                expect(legendItems[1].className).to.equal('ct-series-1');
+                click(seriesB);
+                var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
+                expect(inactiveItem.length).to.equal(0);
+
+            });
+
+            it('should call a function after a click on the legend item', function() {
+                var seriesB = chart.container.querySelector('ul.ct-legend > .ct-series-1');
+
+                click(seriesB);
+                expect(chart.legendClicked).to.equal(true);
+                
+                //Clicking on an inactive series should also call the function.
+                chart.legendClicked = false;
+                click(seriesB);
+                expect(chart.legendClicked).to.equal(true);
+            });
+        });
+        
         describe('clickable for a pie', function() {
             before(function(done) {
                 chart = generateChart('Pie', chartDataPie, {
