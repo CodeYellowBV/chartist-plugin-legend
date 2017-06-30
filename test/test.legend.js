@@ -206,6 +206,39 @@ describe('Chartist plugin legend', function() {
             });
         });
 
+        it('should use the data object name when labels are not defined', function (done) {
+            var chartDataNoLabels = {
+                labels: [], // adding empty arry because chartist.js converts null or undefined labels into empty array
+                series: [
+                    {name: 'Piece A', value: 20},
+                    {name: 'Piece B', value: 10},
+                    {name: 'Piece C', value: 30},
+                    {name: 'Piece D', value: 40}
+                ]
+            };
+            chart = generateChart('Pie', chartDataNoLabels);
+
+            // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
+            chart.on('created', function() {
+                setTimeout(function () {
+                    var legendKey = 0;
+                    var parent = chart.container.querySelector('ul.ct-legend');
+
+                    expect(parent.childNodes.length).to.equal(4);
+
+                    [].forEach.call(parent.childNodes, function(item) {
+                        expect(item.innerHTML).to.equal(chartDataNoLabels.series[legendKey].name);
+                        legendKey += 1;
+                    });
+
+                    destroyChart();
+                    done();
+                }, 10);
+            });
+
+
+        });
+
         it('should allow a custom class name', function(done) {
             chart = generateChart('Line', chartDataLine, { className: 'bananas' });
 
@@ -269,7 +302,7 @@ describe('Chartist plugin legend', function() {
                  }, 10)
               });
            });
-            
+
            it('should allow positioning to any DOM2 element', function (done) {
               var testDOMElement = document.createElement('div');
               document.body.insertBefore(testDOMElement , null);
@@ -282,7 +315,7 @@ describe('Chartist plugin legend', function() {
                     expect(testDOMElement.childNodes.length).to.equal(1);
                     var listElement = testDOMElement.querySelector("ul");
                     expect(testDOMElement.childNodes[0]).to.equal(listElement);
-                     
+
                      // Clean up
                     document.body.removeChild(testDOMElement);
                     done();
