@@ -98,7 +98,7 @@
 
             // Get the right array to use for generating the legend.
             var legendNames = chart.data.series,
-                useLabels = isPieChart && chart.data.labels;
+                useLabels = isPieChart && chart.data.labels && chart.data.labels.length;
             if (useLabels) {
                 var originalLabels = chart.data.labels.slice(0);
                 legendNames = chart.data.labels;
