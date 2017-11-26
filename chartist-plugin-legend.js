@@ -23,6 +23,8 @@
         className: '',
         classNames: false,
         removeAll: false,
+        toggleAllButton: false,
+        toggleAllButtonLabel: 'TOGGLE',
         legendNames: false,
         clickable: true,
         onClick: null,
@@ -121,6 +123,18 @@
                legendElement.appendChild(li);
             });
 
+            if (options.toggleAllButton) {
+               var li = document.createElement('li');
+               var whichColor = legendNames.length + 1;
+               li.className = 'ct-series-' + whichColor;
+               // Append specific class to a legend element, if viable classes are given
+               if (classNamesViable) {
+                  li.className += ' ' + options.classNames[i];
+               }
+               li.textContent = options.toggleAllButtonLabel;
+               legendElement.appendChild(li);
+            }
+
             chart.on('created', function (data) {
                // Append the legend element to the DOM
                if(!(options.position instanceof HTMLElement))
@@ -144,10 +158,17 @@
             if (options.clickable) {
                 legendElement.addEventListener('click', function (e) {
                     var li = e.target;
-                    if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
+                    if (li.parentNode !== legendElement || !li.hasAttribute('data-legend')){
+                        if (options.toggleAllButton) {
+                            var elementsToToggle = document.querySelectorAll('[data-legend]');
+                            elementsToToggle.forEach(function (toggledItem) {
+                                toggledItem.click();
+                            });
+                        }
                         return;
+                    }
                     e.preventDefault();
-
+                        
                     var seriesIndex = parseInt(li.getAttribute('data-legend')),
                         removedSeriesIndex = removedSeries.indexOf(seriesIndex);
 
@@ -164,11 +185,13 @@
                           }
                              // Set all series as active.
                           else {
-                             removedSeries = [];
-                             var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
-                             seriesItems.forEach(function (item) {
-                                item.classList.remove('inactive');
-                             });
+                             if (!options.toggleAllButton) {
+                                removedSeries = [];
+                                var seriesItems = Array.prototype.slice.call(legendElement.childNodes);
+                                seriesItems.forEach(function (item) {
+                                   item.classList.remove('inactive');
+                                });
+                             }
                           }
                        }
                        else {
