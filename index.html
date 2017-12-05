@@ -329,6 +329,17 @@
          var lineWhiteSpaceArray = [];
          var smallestWhitespace = Infinity;
          var lineArray = implementationAsString.split('\n');
+		 // An error is caused in firefox where line.match evauluates to null
+		 // causing the whole stite to fail. This is caused by the behaviour of
+		 // getting the implementation as a string. In firefox 'function(){' is
+		 // the first item in the lineArray while in chrome it isn't included
+		 // Simple fix:
+		 if(lineArray[0].replace(/\s/g,'') == 'function(){') {
+			 lineArray = lineArray.slice(1);
+		 }
+		 // Note: this error will still occur if there isn't white space in an
+		 // item in lineArray
+
          lineArray.forEach(function(line,index){
             if(line.match(/^\s*$/)){
                 delete lineArray[index];
