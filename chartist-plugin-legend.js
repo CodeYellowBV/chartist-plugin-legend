@@ -53,25 +53,6 @@
         }
 
         return function legend(chart) {
-        	function updateChart() {
-        		var newSeries = [];
-                var newLabels = [];
-                
-                for (var i = 0; i < seriesMetadata.length; i++) {
-                   if(seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
-                      newSeries.push(seriesMetadata[i].data);
-                      newLabels.push(seriesMetadata[i].label);
-                   }
-                }
-
-                chart.data.series = newSeries;
-                if (useLabels) {
-                    chart.data.labels = newLabels;
-                }
-
-                chart.update();
-        	}
-        	
             var existingLegendElement = chart.container.querySelector('.ct-legend');
             if (existingLegendElement) {
                 // Clear legend if already existing.
@@ -116,11 +97,11 @@
                 legendNames = chart.data.labels;
             }
             legendNames = options.legendNames || legendNames;
-            
+
             var legends = [];
             var seriesMetadata = new Array(chart.data.series.length);
             var activeLegendCount = 0;
-            
+
             // Initialize the array that associates series with legends.
             // -1 indicates that there is no legend associated with it.
             for (var i = 0; i < chart.data.series.length; i++) {
@@ -138,7 +119,7 @@
             legendNames.forEach(function (legend, i) {
                var legendText = legend.name || legend;
                var legendSeries = legend.series || [i];
-               
+
                var li = document.createElement('li');
                li.className = 'ct-series-' + i;
                // Append specific class to a legend element, if viable classes are given
@@ -148,17 +129,17 @@
                li.setAttribute('data-legend', i);
                li.textContent = legendText;
                legendElement.appendChild(li);
-               
+
                legendSeries.forEach(function(seriesIndex) {
                   seriesMetadata[seriesIndex].legend = i;
                });
-               
+
                legends.push({
                   text: legendText,
                   series: legendSeries,
                   active: true
                });
-               
+
                activeLegendCount++;
             });
 
@@ -200,7 +181,7 @@
                         legend.active = false;
                         activeLegendCount--;
                         li.classList.add('inactive');
-                        
+
                         if (!options.removeAll && activeLegendCount == 0) {
                            //If we can't disable all series at the same time, let's
                            //reenable all of them:
@@ -212,8 +193,23 @@
                        }
                     }
                     
-                    updateChart();
-                    
+                    var newSeries = [];
+                    var newLabels = [];
+
+                    for (var i = 0; i < seriesMetadata.length; i++) {
+                       if(seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
+                          newSeries.push(seriesMetadata[i].data);
+                          newLabels.push(seriesMetadata[i].label);
+                       }
+                    }
+
+                    chart.data.series = newSeries;
+                    if (useLabels) {
+                        chart.data.labels = newLabels;
+                    }
+
+                    chart.update();
+
                     if (options.onClick) {
                         options.onClick(chart, e);
                     }
