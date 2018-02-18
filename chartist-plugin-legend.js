@@ -35,19 +35,20 @@
 
         // Catch invalid options
         if (options && options.position) {
-           if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
-              throw Error('The position you entered is not a valid position');
-           }
-           if(options.position instanceof HTMLElement){
-              // Detatch DOM element from options object, because Chartist.extend currently chokes on circular references present in HTMLElements
-              var cachedDOMPosition = options.position;
-              delete options.position;
-           }
+            if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
+                throw Error('The position you entered is not a valid position');
+            }
+            if (options.position instanceof HTMLElement) {
+                // Detatch DOM element from options object, because Chartist.extend
+                // currently chokes on circular references present in HTMLElements
+                var cachedDOMPosition = options.position;
+                delete options.position;
+            }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
 
-        if(cachedDOMPosition){
+        if (cachedDOMPosition) {
             // Reattatch the DOM Element position if it was removed before
             options.position = cachedDOMPosition
         }
@@ -105,11 +106,11 @@
             // Initialize the array that associates series with legends.
             // -1 indicates that there is no legend associated with it.
             for (var i = 0; i < chart.data.series.length; i++) {
-               seriesMetadata[i] = {
-                 data: chart.data.series[i],
-                 label: useLabels ? chart.data.labels[i] : null,
-                 legend: -1
-               };
+                seriesMetadata[i] = {
+                    data: chart.data.series[i],
+                    label: useLabels ? chart.data.labels[i] : null,
+                    legend: -1
+                };
             }
 
             // Check if given class names are viable to append to legends
@@ -117,50 +118,48 @@
 
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
-               var legendText = legend.name || legend;
-               var legendSeries = legend.series || [i];
+                var legendText = legend.name || legend;
+                var legendSeries = legend.series || [i];
 
-               var li = document.createElement('li');
-               li.className = 'ct-series-' + i;
-               // Append specific class to a legend element, if viable classes are given
-               if (classNamesViable) {
-                  li.className += ' ' + options.classNames[i];
-               }
-               li.setAttribute('data-legend', i);
-               li.textContent = legendText;
-               legendElement.appendChild(li);
+                var li = document.createElement('li');
+                li.className = 'ct-series-' + i;
+                // Append specific class to a legend element, if viable classes are given
+                if (classNamesViable) {
+                    li.className += ' ' + options.classNames[i];
+                }
+                li.setAttribute('data-legend', i);
+                li.textContent = legendText;
+                legendElement.appendChild(li);
 
-               legendSeries.forEach(function(seriesIndex) {
-                  seriesMetadata[seriesIndex].legend = i;
-               });
+                legendSeries.forEach(function(seriesIndex) {
+                    seriesMetadata[seriesIndex].legend = i;
+                });
 
-               legends.push({
-                  text: legendText,
-                  series: legendSeries,
-                  active: true
-               });
+                legends.push({
+                    text: legendText,
+                    series: legendSeries,
+                    active: true
+                });
 
-               activeLegendCount++;
+                activeLegendCount++;
             });
 
             chart.on('created', function (data) {
-               // Append the legend element to the DOM
-               if(!(options.position instanceof HTMLElement))
-               {
-                  switch (options.position) {
-                     case 'top':
-                        chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
-                        break;
+                // Append the legend element to the DOM
+                if (!(options.position instanceof HTMLElement)) {
+                    switch (options.position) {
+                        case 'top':
+                            chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
+                            break;
 
-                     case 'bottom':
-                        chart.container.insertBefore(legendElement, null);
-                        break;
-                   }
-               }
-               else {
-                  // Appends the legend element as the last child of a given HTMLElement
-                  options.position.insertBefore(legendElement, null);
-               }
+                        case 'bottom':
+                            chart.container.insertBefore(legendElement, null);
+                            break;
+                    }
+                } else {
+                    // Appends the legend element as the last child of a given HTMLElement
+                    options.position.insertBefore(legendElement, null);
+                }
             });
 
             if (options.clickable) {
@@ -183,24 +182,24 @@
                         li.classList.add('inactive');
 
                         if (!options.removeAll && activeLegendCount == 0) {
-                           //If we can't disable all series at the same time, let's
-                           //reenable all of them:
-                           for (var i = 0; i < legends.length; i++) {
-                              legends[i].active = true;
-                              activeLegendCount++;
-                              legendElement.childNodes[i].classList.remove('inactive');
-                           }
-                       }
+                            // If we can't disable all series at the same time, let's
+                            // reenable all of them:
+                            for (var i = 0; i < legends.length; i++) {
+                                legends[i].active = true;
+                                activeLegendCount++;
+                                legendElement.childNodes[i].classList.remove('inactive');
+                            }
+                        }
                     }
-                    
+
                     var newSeries = [];
                     var newLabels = [];
 
                     for (var i = 0; i < seriesMetadata.length; i++) {
-                       if(seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
-                          newSeries.push(seriesMetadata[i].data);
-                          newLabels.push(seriesMetadata[i].label);
-                       }
+                        if (seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
+                            newSeries.push(seriesMetadata[i].data);
+                            newLabels.push(seriesMetadata[i].label);
+                        }
                     }
 
                     chart.data.series = newSeries;
@@ -216,7 +215,6 @@
                 });
             }
         };
-
     };
 
     return Chartist.plugins.legend;
