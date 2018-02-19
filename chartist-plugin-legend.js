@@ -56,27 +56,24 @@
         return function legend(chart) {
 
             function removeLegendElement() {
-                var existingLegendElement = chart.container.querySelector('.ct-legend');
-                if (existingLegendElement) {
-                    // Clear legend if already existing.
-                    existingLegendElement.parentNode.removeChild(existingLegendElement);
+                var legendElement = chart.container.querySelector('.ct-legend');
+                if (legendElement) {
+                    legendElement.parentNode.removeChild(legendElement);
                 }
             }
 
             // Set a unique className for each series so that when a series is removed,
             // the other series still have the same color.
             function setSeriesClassNames() {
-                var newSeries = chart.data.series.map(function (series, seriesIndex) {
+                chart.data.series = chart.data.series.map(function (series, seriesIndex) {
                     if (typeof series !== 'object') {
                         series = {
                             value: series
                         };
                     }
-
                     series.className = series.className || chart.options.classNames.series + '-' + Chartist.alphaNumerate(seriesIndex);
                     return series;
                 });
-                chart.data.series = newSeries;
             }
 
             function createLegendElement() {
@@ -96,17 +93,13 @@
 
             // Get the right array to use for generating the legend.
             function getLegendNames(useLabels) {
-                var legendNames = chart.data.series;
-                if (useLabels) {
-                    legendNames = chart.data.labels;
-                }
-                legendNames = options.legendNames || legendNames;
-                return legendNames;
+                return options.legendNames || (useLabels ? chart.data.labels : chart.data.series);
             }
 
-            function initSeriesMetadata(seriesMetadata, useLabels) {
-                // Initialize the array that associates series with legends.
-                // -1 indicates that there is no legend associated with it.
+            // Initialize the array that associates series with legends.
+            // -1 indicates that there is no legend associated with it.
+            function initSeriesMetadata(useLabels) {
+                var seriesMetadata = new Array(chart.data.series.length);
                 for (var i = 0; i < chart.data.series.length; i++) {
                     seriesMetadata[i] = {
                         data: chart.data.series[i],
@@ -114,14 +107,15 @@
                         legend: -1
                     };
                 }
+                return seriesMetadata;
             }
 
             function createNameElement(i, legendText, classNamesViable) {
                 var li = document.createElement('li');
-                li.className = 'ct-series-' + i;
+                li.classList.add('ct-series-' + i);
                 // Append specific class to a legend element, if viable classes are given
                 if (classNamesViable) {
-                    li.className += ' ' + options.classNames[i];
+                    li.classList.add(options.classNames[i]);
                 }
                 li.setAttribute('data-legend', i);
                 li.textContent = legendText;
@@ -156,7 +150,7 @@
                     var legendIndex = parseInt(li.getAttribute('data-legend'));
                     var legend = legends[legendIndex];
 
-                    if (!legends[legendIndex].active) {
+                    if (!legend.active) {
                         legend.active = true;
                         li.classList.remove('inactive');
                     } else {
@@ -200,16 +194,13 @@
             removeLegendElement();
 
             var legendElement = createLegendElement();
-            var isPieChart = chart instanceof Chartist.Pie;
-            var useLabels = isPieChart && chart.data.labels && chart.data.labels.length;
+            var useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
             var legendNames = getLegendNames(useLabels);
+            var seriesMetadata = initSeriesMetadata(useLabels);
             var legends = [];
-            var seriesMetadata = new Array(chart.data.series.length);
-
-            initSeriesMetadata(seriesMetadata, useLabels);
 
             // Check if given class names are viable to append to legends
-            var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
+            var classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
 
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
