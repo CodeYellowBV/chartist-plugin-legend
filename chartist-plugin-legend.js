@@ -158,19 +158,17 @@
 
                     if (!legends[legendIndex].active) {
                         legend.active = true;
-                        activeLegendCount++;
                         li.classList.remove('inactive');
                     } else {
                         legend.active = false;
-                        activeLegendCount--;
                         li.classList.add('inactive');
 
-                        if (!options.removeAll && activeLegendCount == 0) {
+                        var activeCount = legends.filter(function(legend) { return legend.active; }).length;
+                        if (!options.removeAll && activeCount == 0) {
                             // If we can't disable all series at the same time, let's
                             // reenable all of them:
                             for (var i = 0; i < legends.length; i++) {
                                 legends[i].active = true;
-                                activeLegendCount++;
                                 legendElement.childNodes[i].classList.remove('inactive');
                             }
                         }
@@ -207,7 +205,6 @@
             var legendNames = getLegendNames(useLabels);
             var legends = [];
             var seriesMetadata = new Array(chart.data.series.length);
-            var activeLegendCount = 0;
 
             initSeriesMetadata(seriesMetadata, useLabels);
 
@@ -231,8 +228,6 @@
                     series: legendSeries,
                     active: true
                 });
-
-                activeLegendCount++;
             });
 
             chart.on('created', function (data) {
