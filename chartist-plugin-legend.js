@@ -201,10 +201,6 @@
 
             removeLegendElement();
 
-            if (options.clickable) {
-                setSeriesClassNames();
-            }
-
             var legendElement = createLegendElement();
             var isPieChart = chart instanceof Chartist.Pie;
             var useLabels = isPieChart && chart.data.labels && chart.data.labels.length;
@@ -244,6 +240,7 @@
             });
 
             if (options.clickable) {
+                setSeriesClassNames();
                 addClickHandler(legendElement, legends, seriesMetadata, useLabels);
             }
         };
