@@ -54,15 +54,18 @@
         }
 
         return function legend(chart) {
-            var existingLegendElement = chart.container.querySelector('.ct-legend');
-            if (existingLegendElement) {
-                // Clear legend if already existing.
-                existingLegendElement.parentNode.removeChild(existingLegendElement);
+
+            function removeLegendElement() {
+                var existingLegendElement = chart.container.querySelector('.ct-legend');
+                if (existingLegendElement) {
+                    // Clear legend if already existing.
+                    existingLegendElement.parentNode.removeChild(existingLegendElement);
+                }
             }
 
             // Set a unique className for each series so that when a series is removed,
             // the other series still have the same color.
-            if (options.clickable) {
+            function setSeriesClassNames() {
                 var newSeries = chart.data.series.map(function (series, seriesIndex) {
                     if (typeof series !== 'object') {
                         series = {
@@ -76,50 +79,44 @@
                 chart.data.series = newSeries;
             }
 
-            var legendElement = document.createElement('ul'),
-                isPieChart = chart instanceof Chartist.Pie;
-            legendElement.className = 'ct-legend';
-            if (chart instanceof Chartist.Pie) {
-                legendElement.classList.add('ct-legend-inside');
-            }
-            if (typeof options.className === 'string' && options.className.length > 0) {
-                legendElement.classList.add(options.className);
-            }
-
-            if (chart.options.width) {
-                legendElement.style.cssText = 'width: ' + chart.options.width + 'px;margin: 0 auto;';
+            function createLegendElement() {
+                var legendElement = document.createElement('ul');
+                legendElement.className = 'ct-legend';
+                if (chart instanceof Chartist.Pie) {
+                    legendElement.classList.add('ct-legend-inside');
+                }
+                if (typeof options.className === 'string' && options.className.length > 0) {
+                    legendElement.classList.add(options.className);
+                }
+                if (chart.options.width) {
+                    legendElement.style.cssText = 'width: ' + chart.options.width + 'px;margin: 0 auto;';
+                }
+                return legendElement;
             }
 
             // Get the right array to use for generating the legend.
-            var legendNames = chart.data.series,
-                useLabels = isPieChart && chart.data.labels && chart.data.labels.length;
-            if (useLabels) {
-                legendNames = chart.data.labels;
-            }
-            legendNames = options.legendNames || legendNames;
-
-            var legends = [];
-            var seriesMetadata = new Array(chart.data.series.length);
-            var activeLegendCount = 0;
-
-            // Initialize the array that associates series with legends.
-            // -1 indicates that there is no legend associated with it.
-            for (var i = 0; i < chart.data.series.length; i++) {
-                seriesMetadata[i] = {
-                    data: chart.data.series[i],
-                    label: useLabels ? chart.data.labels[i] : null,
-                    legend: -1
-                };
+            function getLegendNames(useLabels) {
+                var legendNames = chart.data.series;
+                if (useLabels) {
+                    legendNames = chart.data.labels;
+                }
+                legendNames = options.legendNames || legendNames;
+                return legendNames;
             }
 
-            // Check if given class names are viable to append to legends
-            var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
+            function initSeriesMetadata(seriesMetadata, useLabels) {
+                // Initialize the array that associates series with legends.
+                // -1 indicates that there is no legend associated with it.
+                for (var i = 0; i < chart.data.series.length; i++) {
+                    seriesMetadata[i] = {
+                        data: chart.data.series[i],
+                        label: useLabels ? chart.data.labels[i] : null,
+                        legend: -1
+                    };
+                }
+            }
 
-            // Loop through all legends to set each name in a list item.
-            legendNames.forEach(function (legend, i) {
-                var legendText = legend.name || legend;
-                var legendSeries = legend.series || [i];
-
+            function createNameElement(i, legendText, classNamesViable) {
                 var li = document.createElement('li');
                 li.className = 'ct-series-' + i;
                 // Append specific class to a legend element, if viable classes are given
@@ -128,23 +125,11 @@
                 }
                 li.setAttribute('data-legend', i);
                 li.textContent = legendText;
-                legendElement.appendChild(li);
+                return li;
+            }
 
-                legendSeries.forEach(function(seriesIndex) {
-                    seriesMetadata[seriesIndex].legend = i;
-                });
-
-                legends.push({
-                    text: legendText,
-                    series: legendSeries,
-                    active: true
-                });
-
-                activeLegendCount++;
-            });
-
-            chart.on('created', function (data) {
-                // Append the legend element to the DOM
+            // Append the legend element to the DOM
+            function appendLegendToDOM(legendElement) {
                 if (!(options.position instanceof HTMLElement)) {
                     switch (options.position) {
                         case 'top':
@@ -159,10 +144,10 @@
                     // Appends the legend element as the last child of a given HTMLElement
                     options.position.insertBefore(legendElement, null);
                 }
-            });
+            }
 
-            if (options.clickable) {
-                legendElement.addEventListener('click', function (e) {
+            function addClickHandler(legendElement, legends, seriesMetadata, useLabels) {
+                legendElement.addEventListener('click', function(e) {
                     var li = e.target;
                     if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
                         return;
@@ -212,6 +197,54 @@
                         options.onClick(chart, e);
                     }
                 });
+            }
+
+            removeLegendElement();
+
+            if (options.clickable) {
+                setSeriesClassNames();
+            }
+
+            var legendElement = createLegendElement();
+            var isPieChart = chart instanceof Chartist.Pie;
+            var useLabels = isPieChart && chart.data.labels && chart.data.labels.length;
+            var legendNames = getLegendNames(useLabels);
+            var legends = [];
+            var seriesMetadata = new Array(chart.data.series.length);
+            var activeLegendCount = 0;
+
+            initSeriesMetadata(seriesMetadata, useLabels);
+
+            // Check if given class names are viable to append to legends
+            var classNamesViable = (Array.isArray(options.classNames) && (options.classNames.length === legendNames.length));
+
+            // Loop through all legends to set each name in a list item.
+            legendNames.forEach(function (legend, i) {
+                var legendText = legend.name || legend;
+                var legendSeries = legend.series || [i];
+
+                var li = createNameElement(i, legendText, classNamesViable);
+                legendElement.appendChild(li);
+
+                legendSeries.forEach(function(seriesIndex) {
+                    seriesMetadata[seriesIndex].legend = i;
+                });
+
+                legends.push({
+                    text: legendText,
+                    series: legendSeries,
+                    active: true
+                });
+
+                activeLegendCount++;
+            });
+
+            chart.on('created', function (data) {
+                appendLegendToDOM(legendElement);
+            });
+
+            if (options.clickable) {
+                addClickHandler(legendElement, legends, seriesMetadata, useLabels);
             }
         };
     };
