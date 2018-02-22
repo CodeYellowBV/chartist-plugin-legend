@@ -139,21 +139,19 @@
                     legend.active = !legend.active;
 
                     var activeLegends = legends.filter(function(legend) { return legend.active; });
-                    if (legend.active) {
-                        li.classList.remove('inactive');
-                    } else if (activeLegends.length > 0 || options.removeAll) {
-                        li.classList.add('inactive');
-                    } else {
-                        // If we can't disable all series at the same time, re-enable all of them
-                        legends.forEach(function(legend) {
+                    var activateAll = activeLegends.length === 0 && !options.removeAll;
+                    var activeSeries = [];
+                    legends.forEach(function(legend) {
+                        if (activateAll)
                             legend.active = true;
+                        if (legend.active) {
                             legend.element.classList.remove('inactive');
-                        });
-                        activeLegends = legends;
-                    }
+                            activeSeries = activeSeries.concat(legend.series);
+                        } else {
+                            legend.element.classList.add('inactive');
+                        }
+                    });
 
-                    var activeSeriesArrays = activeLegends.map(function(legend) { return legend.series; });
-                    var activeSeries = [].concat.apply([], activeSeriesArrays);
                     chart.data.series = activeSeries.map(function(series) { return series.data; });
                     if (useLabels) {
                         chart.data.labels = activeSeries.map(function(series) { return series.label; });
