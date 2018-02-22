@@ -136,39 +136,27 @@
                     var legendIndex = parseInt(li.getAttribute('data-legend'));
                     var legend = legends[legendIndex];
 
-                    if (!legend.active) {
-                        legend.active = true;
+                    legend.active = !legend.active;
+
+                    var activeLegends = legends.filter(function(legend) { return legend.active; });
+                    if (legend.active) {
                         li.classList.remove('inactive');
-                    } else {
-                        legend.active = false;
+                    } else if (activeLegends.length > 0 || options.removeAll) {
                         li.classList.add('inactive');
-
-                        var activeCount = legends.filter(function(legend) { return legend.active; }).length;
-                        if (!options.removeAll && activeCount == 0) {
-                            // If we can't disable all series at the same time, let's
-                            // reenable all of them:
-                            for (var i = 0; i < legends.length; i++) {
-                                legends[i].active = true;
-                                legendElement.childNodes[i].classList.remove('inactive');
-                            }
-                        }
+                    } else {
+                        // If we can't disable all series at the same time, re-enable all of them
+                        legends.forEach(function(legend) {
+                            legend.active = true;
+                            legend.element.classList.remove('inactive');
+                        });
+                        activeLegends = legends;
                     }
 
-                    var newSeries = [];
-                    var newLabels = [];
-                    for (var i = 0; i < legends.length; i++) {
-                        if (legends[i].active) {
-                            var legendSeries = legends[i].series;
-                            for (var j = 0; j < legendSeries.length; j++) {
-                                newSeries.push(legendSeries[j].data);
-                                newLabels.push(legendSeries[j].label);
-                            }
-                        }
-                    }
-
-                    chart.data.series = newSeries;
+                    var activeSeriesArrays = activeLegends.map(function(legend) { return legend.series; });
+                    var activeSeries = [].concat.apply([], activeSeriesArrays);
+                    chart.data.series = activeSeries.map(function(series) { return series.data; });
                     if (useLabels) {
-                        chart.data.labels = newLabels;
+                        chart.data.labels = activeSeries.map(function(series) { return series.label; });
                     }
 
                     chart.update();
@@ -205,6 +193,7 @@
                 legends.push({
                     text: legendText,
                     series: legendSeries,
+                    element: li,
                     active: true
                 });
             });
