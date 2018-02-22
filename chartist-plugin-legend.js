@@ -154,43 +154,43 @@
                 return legends;
             }
 
-            function addClickHandler(legendElement, legends, useLabels) {
-                legendElement.addEventListener('click', function(e) {
-                    var li = e.target;
-                    if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
-                        return;
-                    e.preventDefault();
-
-                    var legendIndex = parseInt(li.getAttribute('data-legend'));
-                    var legend = legends[legendIndex];
-
-                    legend.active = !legend.active;
-
-                    var activeLegends = legends.filter(function(legend) { return legend.active; });
-                    var activateAll = activeLegends.length === 0 && !options.removeAll;
-                    var activeSeries = [];
-                    legends.forEach(function(legend) {
-                        if (activateAll)
-                            legend.active = true;
-                        if (legend.active) {
-                            legend.element.classList.remove('inactive');
-                            activeSeries = activeSeries.concat(legend.series);
-                        } else {
-                            legend.element.classList.add('inactive');
-                        }
-                    });
-
-                    chart.data.series = activeSeries.map(function(series) { return series.data; });
-                    if (useLabels) {
-                        chart.data.labels = activeSeries.map(function(series) { return series.label; });
-                    }
-
-                    chart.update();
-
-                    if (options.onClick) {
-                        options.onClick(chart, e);
+            function applyLegendState(legends, useLabels) {
+                var activeLegends = legends.filter(function(legend) { return legend.active; });
+                var activateAll = activeLegends.length === 0 && !options.removeAll;
+                var activeSeries = [];
+                legends.forEach(function(legend) {
+                    if (activateAll)
+                        legend.active = true;
+                    if (legend.active) {
+                        legend.element.classList.remove('inactive');
+                        activeSeries = activeSeries.concat(legend.series);
+                    } else {
+                        legend.element.classList.add('inactive');
                     }
                 });
+
+                chart.data.series = activeSeries.map(function(series) { return series.data; });
+                if (useLabels) {
+                    chart.data.labels = activeSeries.map(function(series) { return series.label; });
+                }
+
+                chart.update();
+            }
+
+            function handleClick(e, legendElement, legends, useLabels) {
+                var li = e.target;
+                if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
+                    return;
+                e.preventDefault();
+
+                var legendIndex = parseInt(li.getAttribute('data-legend'));
+                var legend = legends[legendIndex];
+                legend.active = !legend.active;
+                applyLegendState(legends, useLabels);
+
+                if (options.onClick) {
+                    options.onClick(chart, e);
+                }
             }
 
             removeLegendElement();
@@ -206,7 +206,9 @@
 
             if (options.clickable) {
                 setSeriesClassNames();
-                addClickHandler(legendElement, legends, useLabels);
+                legendElement.addEventListener('click', function(e) {
+                    handleClick(e, legendElement, legends, useLabels);
+                });
             }
         };
     };
