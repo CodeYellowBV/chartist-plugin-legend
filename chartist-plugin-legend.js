@@ -126,6 +126,34 @@
                 }
             }
 
+            function initLegends(legendElement, legendNames, useLabels) {
+                var legends = [];
+                // Check if given class names are viable to append to legends
+                var classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
+                // Loop through all legends to initialize metadata and set each name in a list item
+                legendNames.forEach(function(legend, i) {
+                    var legendText = legend.name || legend;
+                    var legendSeriesIndices = legend.series || [i];
+                    var legendSeries = legendSeriesIndices.map(function(i) {
+                        return {
+                            data: chart.data.series[i],
+                            label: useLabels ? chart.data.labels[i] : null
+                        }
+                    });
+
+                    var li = createNameElement(i, legendText, classNamesViable);
+                    legendElement.appendChild(li);
+
+                    legends.push({
+                        text: legendText,
+                        series: legendSeries,
+                        element: li,
+                        active: true
+                    });
+                });
+                return legends;
+            }
+
             function addClickHandler(legendElement, legends, useLabels) {
                 legendElement.addEventListener('click', function(e) {
                     var li = e.target;
@@ -170,31 +198,7 @@
             var legendElement = createLegendElement();
             var useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
             var legendNames = getLegendNames(useLabels);
-            var legends = [];
-
-            // Check if given class names are viable to append to legends
-            var classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
-
-            // Loop through all legends to set each name in a list item.
-            legendNames.forEach(function (legend, i) {
-                var legendText = legend.name || legend;
-                var legendSeriesIndices = legend.series || [i];
-                var legendSeries = legendSeriesIndices.map(function(i) {
-                    return {
-                        data: chart.data.series[i],
-                        label: useLabels ? chart.data.labels[i] : null
-                    }});
-
-                var li = createNameElement(i, legendText, classNamesViable);
-                legendElement.appendChild(li);
-
-                legends.push({
-                    text: legendText,
-                    series: legendSeries,
-                    element: li,
-                    active: true
-                });
-            });
+            var legends = initLegends(legendElement, legendNames, useLabels);
 
             chart.on('created', function (data) {
                 appendLegendToDOM(legendElement);
