@@ -206,6 +206,30 @@ describe('Chartist plugin legend', function() {
             });
         });
 
+        it('should use custom HTML legend names if provided', function(done) {
+            var legendNames = ['Sheep <span>Big</span>', '<div class="some-class">are</div>', 'animals'];
+            chart = generateChart('Line', chartDataLine, { legendNames: legendNames, useHtml: true });
+
+            // Set a delay on the test to ensure it doesn't overlap with the plugin native 'created' handler
+            chart.on('created', function () {
+               setTimeout(function () {
+                  var legendKey = 0;
+                  var parent = chart.container.querySelector('ul.ct-legend');
+
+                  expect(parent.childNodes.length).to.equal(3);
+                  [].forEach.call(parent.childNodes, function (item)
+                  {
+                     expect(item.innerHTML).to.equal(legendNames[legendKey]);
+                     legendKey += 1;
+                  });
+
+                  destroyChart();
+                  done();
+
+               }, 10)
+            });
+        });
+
         it('should use the data object name when labels are not defined', function (done) {
             var chartDataNoLabels = {
                 labels: [], // adding empty arry because chartist.js converts null or undefined labels into empty array
@@ -435,14 +459,14 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
-                
+
                 //Clicking on an inactive series should also call the function.
                 chart.legendClicked = false;
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
             });
         });
-        
+
         describe('clickable with multiple series per legend item', function() {
             before(function(done) {
                 chart = generateChart('Line', chartDataLine, {
@@ -490,7 +514,7 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
                 expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
                 expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
-                
+
                 // Clicking on the first legend item should hide the two first series:
                 click(seriesA);
                 expect(chart.data.series.length).to.equal(1);
@@ -549,14 +573,14 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
-                
+
                 //Clicking on an inactive series should also call the function.
                 chart.legendClicked = false;
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
             });
         });
-        
+
         describe('clickable for a pie', function() {
             before(function(done) {
                 chart = generateChart('Pie', chartDataPie, {
