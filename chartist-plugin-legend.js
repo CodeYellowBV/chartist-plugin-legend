@@ -24,6 +24,7 @@
         classNames: false,
         removeAll: false,
         legendNames: false,
+        useHtml: false,
         clickable: true,
         onClick: null,
         position: 'top'
@@ -118,7 +119,11 @@
                     li.classList.add(options.classNames[i]);
                 }
                 li.setAttribute('data-legend', i);
-                li.textContent = legendText;
+                if (options.useHtml) {
+                    li.innerHTML = legendText;
+                } else {
+                    li.textContent = legendText;
+                }
                 return li;
             }
 
