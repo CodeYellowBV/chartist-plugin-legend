@@ -33,25 +33,14 @@
 
     Chartist.plugins.legend = function (options) {
 
-        // Catch invalid options
+        // Catch invalid options - position must be a string
         if (options && options.position) {
-            if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
+            if (!(typeof options.position === 'string')) {
                 throw Error('The position you entered is not a valid position');
-            }
-            if (options.position instanceof HTMLElement) {
-                // Detatch DOM element from options object, because Chartist.extend
-                // currently chokes on circular references present in HTMLElements
-                var cachedDOMPosition = options.position;
-                delete options.position;
             }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
-
-        if (cachedDOMPosition) {
-            // Reattatch the DOM Element position if it was removed before
-            options.position = cachedDOMPosition
-        }
 
         return function legend(chart) {
 
@@ -124,19 +113,25 @@
 
             // Append the legend element to the DOM
             function appendLegendToDOM(legendElement) {
-                if (!(options.position instanceof HTMLElement)) {
-                    switch (options.position) {
-                        case 'top':
-                            chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
-                            break;
+                // If you named your div 'top' or 'bottom', it won't be attached
+                switch (options.position) {
+                    case 'top':
+                        chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
+                        break;
 
-                        case 'bottom':
-                            chart.container.insertBefore(legendElement, null);
-                            break;
-                    }
-                } else {
-                    // Appends the legend element as the last child of a given HTMLElement
-                    options.position.insertBefore(legendElement, null);
+                    case 'bottom':
+                        chart.container.insertBefore(legendElement, null);
+                        break;
+
+                    default:
+                        var pos = document.getElementById(options.position)
+                        if (pos !== null) {
+                            // Appends the legend element as the last child of a given HTMLElement
+                            pos.insertBefore(legendElement, null);
+                        } else {
+                            throw Error('The position you entered is not a valid position');
+                        }
+                        break;
                 }
             }
 
@@ -157,9 +152,11 @@
                         legend.active = false;
                         li.classList.add('inactive');
 
-                        var activeCount = legends.filter(function(legend) { return legend.active; }).length;
-                        if (!options.removeAll && activeCount == 0) {
-                            // If we can't disable all series at the same time, let's
+                        var activeCount = legends.filter(function (legend) {
+                            return legend.active;
+                        }).length;
+                        if (!options.removeAll && activeCount === 0) {
+                            // If we can't disable all series at the same time, var's
                             // reenable all of them:
                             for (var i = 0; i < legends.length; i++) {
                                 legends[i].active = true;
@@ -172,7 +169,7 @@
                     var newLabels = [];
 
                     for (var i = 0; i < seriesMetadata.length; i++) {
-                        if (seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
+                        if (seriesMetadata[i].legend !== -1 && legends[seriesMetadata[i].legend].active) {
                             newSeries.push(seriesMetadata[i].data);
                             newLabels.push(seriesMetadata[i].label);
                         }
@@ -221,7 +218,7 @@
                 });
             });
 
-            chart.on('created', function (data) {
+            chart.on('created', function () {
                 appendLegendToDOM(legendElement);
             });
 

@@ -55,6 +55,34 @@ As styles are very different with each project, no CSS is included. You can copy
 }
 ```
 
+If you are using this within a Vue.js component, you need to wrap it in a `<style lang='scss'>` tag.
+Don't forget to import or define the `$ct-series-colors` variable:
+
+
+```scss
+<style lang='scss'>
+  $ct-series-colors: (
+          #d70206,
+          #f05b4f,
+          #f4c63d,
+          #d17905,
+          #453d3f,
+          #59922b,
+          #0544d3,
+          #6b0392,
+          #f05b4f,
+          #dda458,
+          #eacf7d,
+          #86797d,
+          #b2c326,
+          #6188e2,
+          #a748ca
+  ) !default;
+  // Your scss code here
+</style>
+```
+
+
 ## Usage
 
 In an example chart:
@@ -68,7 +96,7 @@ new Chartist.Bar('.ct-chart', data, {
             Chartist.plugins.legend()
         ]
     },
-});
+)
 ```
 
 | __Option__ | __Description__ | __Type__ | __Default__ |
@@ -79,4 +107,4 @@ new Chartist.Bar('.ct-chart', data, {
 | `onClick` | Accepts a function that gets invoked if `clickable` is true. The function has the `chart`, and the click event (`e`), as arguments. | `mixed` | `false` |
 | `classNames` | Accepts a array of strings as long as the chart's series, those will be added as classes to the `li` elements. | `mixed` | `false` |
 | `removeAll` | Allow all series to be removed at once. | `bool` | `false` |
-| `position` | Sets the position of the legend element. `top`, `bottom` or any DOM2 Element are currently accepted. If a DOM Element is given, the legend will be appended as it's last child. | `'top'|'bottom'|HTMLElement` | `'top'` |
+| `position` | Sets the position of the legend element. `top`, `bottom` or the `id` of any DOM2 Element are currently accepted. If a DOM Element is given, the legend will be appended as it's last child. | `string` | `'top'` |
