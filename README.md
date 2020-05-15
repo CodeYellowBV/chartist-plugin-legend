@@ -109,7 +109,7 @@ Import the plugin together with chartist in a plugin file or in your main.js
 ```js
 import Vue from 'vue'
 import 'chartist/dist/chartist.min.css'
-import 'chartist-plugin-legend/chartist-plugin-legend'
+import '@matteoraf/chartist-plugin-legend/chartist-plugin-legend'
 
 Vue.use(require('vue-chartist'))
 ```
