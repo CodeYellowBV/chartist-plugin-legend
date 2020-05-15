@@ -19,7 +19,7 @@
      */
     'use strict';
 
-    var defaultOptions = {
+    const defaultOptions = {
         className: '',
         classNames: false,
         removeAll: false,
@@ -33,30 +33,19 @@
 
     Chartist.plugins.legend = function (options) {
 
-        // Catch invalid options
+        // Catch invalid options - position must be a string
         if (options && options.position) {
-            if (!(options.position === 'top' || options.position === 'bottom' || options.position instanceof HTMLElement)) {
+            if (!(typeof options.position === 'string')) {
                 throw Error('The position you entered is not a valid position');
-            }
-            if (options.position instanceof HTMLElement) {
-                // Detatch DOM element from options object, because Chartist.extend
-                // currently chokes on circular references present in HTMLElements
-                var cachedDOMPosition = options.position;
-                delete options.position;
             }
         }
 
         options = Chartist.extend({}, defaultOptions, options);
 
-        if (cachedDOMPosition) {
-            // Reattatch the DOM Element position if it was removed before
-            options.position = cachedDOMPosition
-        }
-
         return function legend(chart) {
 
             function removeLegendElement() {
-                var legendElement = chart.container.querySelector('.ct-legend');
+                const legendElement = chart.container.querySelector('.ct-legend');
                 if (legendElement) {
                     legendElement.parentNode.removeChild(legendElement);
                 }
@@ -77,7 +66,7 @@
             }
 
             function createLegendElement() {
-                var legendElement = document.createElement('ul');
+                const legendElement = document.createElement('ul');
                 legendElement.className = 'ct-legend';
                 if (chart instanceof Chartist.Pie) {
                     legendElement.classList.add('ct-legend-inside');
@@ -99,8 +88,8 @@
             // Initialize the array that associates series with legends.
             // -1 indicates that there is no legend associated with it.
             function initSeriesMetadata(useLabels) {
-                var seriesMetadata = new Array(chart.data.series.length);
-                for (var i = 0; i < chart.data.series.length; i++) {
+                const seriesMetadata = new Array(chart.data.series.length);
+                for (let i = 0; i < chart.data.series.length; i++) {
                     seriesMetadata[i] = {
                         data: chart.data.series[i],
                         label: useLabels ? chart.data.labels[i] : null,
@@ -111,7 +100,7 @@
             }
 
             function createNameElement(i, legendText, classNamesViable) {
-                var li = document.createElement('li');
+                const li = document.createElement('li');
                 li.classList.add('ct-series-' + i);
                 // Append specific class to a legend element, if viable classes are given
                 if (classNamesViable) {
@@ -124,31 +113,37 @@
 
             // Append the legend element to the DOM
             function appendLegendToDOM(legendElement) {
-                if (!(options.position instanceof HTMLElement)) {
-                    switch (options.position) {
-                        case 'top':
-                            chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
-                            break;
+                // If you named your div 'top' or 'bottom', it won't be attached
+                switch (options.position) {
+                    case 'top':
+                        chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
+                        break;
 
-                        case 'bottom':
-                            chart.container.insertBefore(legendElement, null);
-                            break;
-                    }
-                } else {
-                    // Appends the legend element as the last child of a given HTMLElement
-                    options.position.insertBefore(legendElement, null);
+                    case 'bottom':
+                        chart.container.insertBefore(legendElement, null);
+                        break;
+
+                    default:
+                        const pos = document.getElementById(options.position)
+                        if (pos !== null) {
+                            // Appends the legend element as the last child of a given HTMLElement
+                            pos.insertBefore(legendElement, null);
+                        } else {
+                            throw Error('The position you entered is not a valid position');
+                        }
+                        break;
                 }
             }
 
             function addClickHandler(legendElement, legends, seriesMetadata, useLabels) {
                 legendElement.addEventListener('click', function(e) {
-                    var li = e.target;
+                    const li = e.target;
                     if (li.parentNode !== legendElement || !li.hasAttribute('data-legend'))
                         return;
                     e.preventDefault();
 
-                    var legendIndex = parseInt(li.getAttribute('data-legend'));
-                    var legend = legends[legendIndex];
+                    const legendIndex = parseInt(li.getAttribute('data-legend'));
+                    const legend = legends[legendIndex];
 
                     if (!legend.active) {
                         legend.active = true;
@@ -157,22 +152,24 @@
                         legend.active = false;
                         li.classList.add('inactive');
 
-                        var activeCount = legends.filter(function(legend) { return legend.active; }).length;
-                        if (!options.removeAll && activeCount == 0) {
+                        const activeCount = legends.filter(function (legend) {
+                            return legend.active;
+                        }).length;
+                        if (!options.removeAll && activeCount === 0) {
                             // If we can't disable all series at the same time, let's
                             // reenable all of them:
-                            for (var i = 0; i < legends.length; i++) {
+                            for (let i = 0; i < legends.length; i++) {
                                 legends[i].active = true;
                                 legendElement.childNodes[i].classList.remove('inactive');
                             }
                         }
                     }
 
-                    var newSeries = [];
-                    var newLabels = [];
+                    const newSeries = [];
+                    const newLabels = [];
 
-                    for (var i = 0; i < seriesMetadata.length; i++) {
-                        if (seriesMetadata[i].legend != -1 && legends[seriesMetadata[i].legend].active) {
+                    for (let i = 0; i < seriesMetadata.length; i++) {
+                        if (seriesMetadata[i].legend !== -1 && legends[seriesMetadata[i].legend].active) {
                             newSeries.push(seriesMetadata[i].data);
                             newLabels.push(seriesMetadata[i].label);
                         }
@@ -193,21 +190,21 @@
 
             removeLegendElement();
 
-            var legendElement = createLegendElement();
-            var useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
-            var legendNames = getLegendNames(useLabels);
-            var seriesMetadata = initSeriesMetadata(useLabels);
-            var legends = [];
+            const legendElement = createLegendElement();
+            const useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
+            const legendNames = getLegendNames(useLabels);
+            const seriesMetadata = initSeriesMetadata(useLabels);
+            const legends = [];
 
             // Check if given class names are viable to append to legends
-            var classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
+            const classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
 
             // Loop through all legends to set each name in a list item.
             legendNames.forEach(function (legend, i) {
-                var legendText = legend.name || legend;
-                var legendSeries = legend.series || [i];
+                const legendText = legend.name || legend;
+                const legendSeries = legend.series || [i];
 
-                var li = createNameElement(i, legendText, classNamesViable);
+                const li = createNameElement(i, legendText, classNamesViable);
                 legendElement.appendChild(li);
 
                 legendSeries.forEach(function(seriesIndex) {
@@ -221,7 +218,7 @@
                 });
             });
 
-            chart.on('created', function (data) {
+            chart.on('created', function () {
                 appendLegendToDOM(legendElement);
             });
 

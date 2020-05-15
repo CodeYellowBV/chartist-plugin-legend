@@ -1,12 +1,12 @@
 {
-  "name": "chartist-plugin-legend",
-  "version": "0.6.2",
-  "author": "Kees Kluskens <kees@codeyellow.nl>",
+  "name": "@matteoraf/chartist-plugin-legend",
+  "version": "0.7.0",
+  "author": "Matteoraf & Kees Kluskens <kees@codeyellow.nl>",
   "description": "Legend plugin for Chartist.js.",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CodeYellowBV/chartist-plugin-legend"
+    "url": "https://github.com/matteoraf/chartist-plugin-legend"
   },
   "main": "chartist-plugin-legend.js",
   "files": [
