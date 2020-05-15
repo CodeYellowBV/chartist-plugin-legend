@@ -1,20 +1,16 @@
 # chartist-plugin-legend
 
-[![Build Status](https://travis-ci.org/matteoraf/chartist-plugin-legend.svg?branch=master)](https://travis-ci.org/matteoraf/chartist-plugin-legend)
+[![Build Status](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend.svg?branch=master)](https://travis-ci.org/CodeYellowBV/chartist-plugin-legend)
+[![Coverage Status](https://coveralls.io/repos/github/CodeYellowBV/chartist-plugin-legend/badge.svg?branch=master)](https://coveralls.io/github/CodeYellowBV/chartist-plugin-legend?branch=master)
 
 Implements a legend for [Chartist](https://github.com/gionkunz/chartist-js) charts.
 
 **[Demo](https://codeyellowbv.github.io/chartist-plugin-legend/)**
 
-## Why this Fork
-
-Since I needed to use this plugin with a Vue.js project and I needed to append the legend to a DOM element which wasn't yet rendered at the time the plugin was loaded, 
-I needed to be able to pass the id of the element and leave the trouble of retrieving the DOM element to the plugin itself.
-
 ## Install
 
 ```
-$ npm install @matteoraf/chartist-plugin-legend --save
+$ npm install chartist-plugin-legend --save
 ```
 
 As styles are very different with each project, no CSS is included. You can copy paste this to use as base:
@@ -60,7 +56,7 @@ As styles are very different with each project, no CSS is included. You can copy
 ```
 
 If you are using this within a Vue.js component, you need to wrap it in a `<style lang='scss'>` tag.
-Don't forget to import or define the `$ct-series-colors` variable
+Don't forget to import or define the `$ct-series-colors` variable:
 
 
 ```scss
@@ -102,42 +98,6 @@ new Chartist.Bar('.ct-chart', data, {
     },
 )
 ```
-
-## Usage in a Vue.js project with the vue-chartist component
-
-Import the plugin together with chartist in a plugin file or in your main.js
-```js
-import Vue from 'vue'
-import 'chartist/dist/chartist.min.css'
-import '@matteoraf/chartist-plugin-legend/chartist-plugin-legend'
-
-Vue.use(require('vue-chartist'))
-```
-
-Then use it in any of your components the same way you'd normally do:
-
-```html
-<chartist
-        :data="data"
-        :event-handlers="eventHandlers"
-        :options="options"
-        :ratio="ratio"
-        :responsive-options="responsiveOptions"
-        :type="type"
-        style=""
-      />
-```
-
-```js
-data: {}
-options: {
-    plugins: [
-        this.$chartist.plugins.legend({...}),
-            ]
-    }
-```
-
-Then in your component
 
 | __Option__ | __Description__ | __Type__ | __Default__ |
 | ---        | ---             | ---      | ---         |
