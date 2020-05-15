@@ -174,8 +174,8 @@ describe('Chartist plugin legend', function() {
         after(destroyChart);
 
         it('should create unique legends', function () {
-            const legendText1 = chart.container.querySelector('ul.ct-legend').textContent;
-            const legendText2 = chart2.container.querySelector('ul.ct-legend').textContent;
+            var legendText1 = chart.container.querySelector('ul.ct-legend').textContent;
+            var legendText2 = chart2.container.querySelector('ul.ct-legend').textContent;
             expect(legendText1).to.equal('Blue pillRed pillPurple pill');
             expect(legendText2).to.equal('Second pill');
         });
@@ -304,7 +304,7 @@ describe('Chartist plugin legend', function() {
            });
 
            it('should allow positioning to any DOM2 element', function (done) {
-              const elementId = 'legend'
+              var elementId = 'legend'
               var testDOMElement = document.createElement('div');
               testDOMElement.setAttribute('id', elementId)
               document.body.insertBefore(testDOMElement , null);
