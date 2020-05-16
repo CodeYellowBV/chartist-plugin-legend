@@ -408,9 +408,10 @@ describe('Chartist plugin legend', function() {
                 // The first click should hide the corresponding series.
                 click(seriesB);
                 var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
-                expect(legendItems[0].className).to.equal('ct-series-0');
-                expect(legendItems[1].className).to.equal('ct-series-1 inactive');
-                expect(legendItems[2].className).to.equal('ct-series-2');
+                expect(legendItems[0].className).to.contain('ct-series-0');
+                expect(legendItems[1].className).to.contain('ct-series-1');
+                expect(legendItems[1].className).to.contain('inactive');
+                expect(legendItems[2].className).to.contain('ct-series-2');
 
                 // A second click should show the corresponding series again.
                 click(seriesB);
@@ -421,9 +422,11 @@ describe('Chartist plugin legend', function() {
                 click(seriesA);
                 click(seriesB);
                 var legendItems = chart.container.querySelectorAll('ul.ct-legend > li');
-                expect(legendItems[0].className).to.equal('ct-series-0 inactive');
-                expect(legendItems[1].className).to.equal('ct-series-1 inactive');
-                expect(legendItems[2].className).to.equal('ct-series-2');
+                expect(legendItems[0].className).to.contain('ct-series-0');
+                expect(legendItems[0].className).to.contain('inactive');
+                expect(legendItems[1].className).to.contain('ct-series-1');
+                expect(legendItems[1].className).to.contain('inactive');
+                expect(legendItems[2].className).to.contain('ct-series-2');
                 click(seriesC);
                 var inactiveItem = chart.container.querySelectorAll('ul.ct-legend > li.inactive');
                 expect(inactiveItem.length).to.equal(0);
@@ -435,14 +438,14 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
-                
+
                 //Clicking on an inactive series should also call the function.
                 chart.legendClicked = false;
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
             });
         });
-        
+
         describe('clickable with multiple series per legend item', function() {
             before(function(done) {
                 chart = generateChart('Line', chartDataLine, {
@@ -490,7 +493,7 @@ describe('Chartist plugin legend', function() {
                 expect(svgSeries2[0].className.baseVal).to.contain('ct-series-a');
                 expect(svgSeries2[1].className.baseVal).to.contain('ct-series-b');
                 expect(svgSeries2[2].className.baseVal).to.contain('ct-series-c');
-                
+
                 // Clicking on the first legend item should hide the two first series:
                 click(seriesA);
                 expect(chart.data.series.length).to.equal(1);
@@ -549,14 +552,14 @@ describe('Chartist plugin legend', function() {
 
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
-                
+
                 //Clicking on an inactive series should also call the function.
                 chart.legendClicked = false;
                 click(seriesB);
                 expect(chart.legendClicked).to.equal(true);
             });
         });
-        
+
         describe('clickable for a pie', function() {
             before(function(done) {
                 chart = generateChart('Pie', chartDataPie, {
