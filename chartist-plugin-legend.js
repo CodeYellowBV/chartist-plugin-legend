@@ -110,12 +110,16 @@
                 return seriesMetadata;
             }
 
-            function createNameElement(i, legendText, classNamesViable) {
+            function createNameElement(i, legendText, classNamesViable, seriesClassName) {
                 var li = document.createElement('li');
                 li.classList.add('ct-series-' + i);
                 // Append specific class to a legend element, if viable classes are given
                 if (classNamesViable) {
                     li.classList.add(options.classNames[i]);
+                }
+                // Append the series className too, if given
+                if (seriesClassName) {
+                    li.classList.add(seriesClassName);
                 }
                 li.setAttribute('data-legend', i);
                 li.textContent = legendText;
@@ -206,8 +210,9 @@
             legendNames.forEach(function (legend, i) {
                 var legendText = legend.name || legend;
                 var legendSeries = legend.series || [i];
+                var legendClassName = legend.className ? legend.className : null;
 
-                var li = createNameElement(i, legendText, classNamesViable);
+                var li = createNameElement(i, legendText, classNamesViable, legendClassName);
                 legendElement.appendChild(li);
 
                 legendSeries.forEach(function(seriesIndex) {
