@@ -55,10 +55,17 @@
 
         return function legend(chart) {
 
+            // if the legend has been already created and appended, removes the appendedElement
+            // otherwise it looks for an element with the .ct-legend class inside the chart container
             function removeLegendElement() {
-                var legendElement = chart.container.querySelector('.ct-legend');
-                if (legendElement) {
-                    legendElement.parentNode.removeChild(legendElement);
+                if(appendedElement instanceof HTMLElement) {
+                    appendedElement.parentNode.removeChild(appendedElement);
+                    appendedElement = null
+                } else {
+                    var legendElement = chart.container.querySelector('.ct-legend');
+                    if (legendElement) {
+                        legendElement.parentNode.removeChild(legendElement);
+                    }
                 }
             }
 
@@ -122,21 +129,19 @@
                 return li;
             }
 
-            // Append the legend element to the DOM
+            // Append the legend element to the DOM, returns the appended element
             function appendLegendToDOM(legendElement) {
                 if (!(options.position instanceof HTMLElement)) {
                     switch (options.position) {
                         case 'top':
-                            chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
-                            break;
+                            return chart.container.insertBefore(legendElement, chart.container.childNodes[0]);
 
                         case 'bottom':
-                            chart.container.insertBefore(legendElement, null);
-                            break;
+                            return chart.container.insertBefore(legendElement, null);
                     }
                 } else {
                     // Appends the legend element as the last child of a given HTMLElement
-                    options.position.insertBefore(legendElement, null);
+                    return options.position.insertBefore(legendElement, null);
                 }
             }
 
@@ -191,44 +196,85 @@
                 });
             }
 
-            removeLegendElement();
-
-            var legendElement = createLegendElement();
-            var useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
-            var legendNames = getLegendNames(useLabels);
-            var seriesMetadata = initSeriesMetadata(useLabels);
-            var legends = [];
-
-            // Check if given class names are viable to append to legends
-            var classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
-
-            // Loop through all legends to set each name in a list item.
-            legendNames.forEach(function (legend, i) {
-                var legendText = legend.name || legend;
-                var legendSeries = legend.series || [i];
-
-                var li = createNameElement(i, legendText, classNamesViable);
-                legendElement.appendChild(li);
-
-                legendSeries.forEach(function(seriesIndex) {
-                    seriesMetadata[seriesIndex].legend = i;
-                });
-
-                legends.push({
-                    text: legendText,
-                    series: legendSeries,
-                    active: true
-                });
-            });
-
-            chart.on('created', function (data) {
-                appendLegendToDOM(legendElement);
-            });
-
-            if (options.clickable) {
-                setSeriesClassNames();
-                addClickHandler(legendElement, legends, seriesMetadata, useLabels);
+            // Init all vars
+            var appendedElement;
+            var legendElement;
+            var useLabels;
+            var legendNames;
+            var seriesMetadata;
+            var legends;
+            var classNamesViable;
+            // Set up the reset callBack
+            var resetCallback = options.resetCallback
+            // And the reset function
+            var reset = function () {
+                initLegend(chart)
             }
+
+            // This puts all the above together
+            function initLegend(chart) {
+                removeLegendElement();
+                legendElement = createLegendElement();
+                useLabels = chart instanceof Chartist.Pie && chart.data.labels && chart.data.labels.length;
+                legendNames = getLegendNames(useLabels);
+                seriesMetadata = initSeriesMetadata(useLabels);
+                legends = [];
+
+                // Check if given class names are viable to append to legends
+                classNamesViable = Array.isArray(options.classNames) && options.classNames.length === legendNames.length;
+
+                // Loop through all legends to set each name in a list item.
+                legendNames.forEach(function (legend, i) {
+                    var legendText = legend.name || legend;
+                    var legendSeries = legend.series || [i];
+
+                    var li = createNameElement(i, legendText, classNamesViable);
+                    legendElement.appendChild(li);
+
+                    legendSeries.forEach(function(seriesIndex) {
+                        seriesMetadata[seriesIndex].legend = i;
+                    });
+
+                    legends.push({
+                        text: legendText,
+                        series: legendSeries,
+                        active: true
+                    });
+                });
+
+                // Append the legend element
+                chart.on('created', function () {
+                    appendedElement = appendLegendToDOM(legendElement);
+                    /* This needs a bit of explanation: the first part before && just checks if resetCallback actually exists
+                       then, given that it exists, it calls resetCallback with the two arguments chart and reset
+                       In the page rendering the chart we'd have set up something like this:
+                       var resetCallback;
+                       function chartResetCallback(chart, reset) {
+                            resetCallback = reset
+                       }
+                       And then we load our plugin by passing chartResetCallback
+                       Chartist.plugins.legend({
+                          resetCallback: chartResetCallback,
+                        })
+                       What happens is that we are "passing in" our chartResetCallback to the plugin
+                       The plugin runs it by calling resetCallback(chart, reset) and this will "pass out"
+                       our reset function as an argument to chartResetCallback() and this will assign the internal
+                       reset function to the external resetCallback variable.
+                       So now, on our page, we can call resetCallback() and this will trigger the internal reset() function
+                       */
+                    resetCallback && resetCallback(chart, reset)
+                });
+
+                if (options.clickable) {
+                    setSeriesClassNames();
+                    addClickHandler(legendElement, legends, seriesMetadata, useLabels);
+                }
+
+            }
+
+            // Let's now run it and create our legend
+            initLegend(chart)
+
         };
     };
 
